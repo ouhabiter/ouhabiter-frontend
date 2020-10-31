@@ -6,11 +6,16 @@ class Map extends Component {
     constructor(props) {
         super(props);
         this.onMapLoad = this.onMapLoad.bind(this);
+        this.handleStationClick = this.handleStationClick.bind(this);
     }
 
     onMapLoad(map) {
         this.map = map;
         this.forceUpdate();
+    }
+
+    handleStationClick(station) {
+        this.props.onStationClick(station);
     }
 
     render() {
@@ -29,7 +34,7 @@ class Map extends Component {
                         <span
                             style={{ fontSize: '30px' }}
                             onClick={() => {
-                                alert(element.city);
+                                this.handleStationClick(element)
                             }} 
                         >
                             🏠
