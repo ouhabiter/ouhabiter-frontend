@@ -7,58 +7,20 @@ class Map extends Component {
         super(props);
         this.onMapLoad = this.onMapLoad.bind(this);
         this.handleStationClick = this.handleStationClick.bind(this);
-        this.origin = [2.34298812806494,48.8565848333607];
-        this.routeData = {
-            'type': 'Feature',
-            'geometry': {
-                'type': 'LineString',
-                'coordinates': []
-            }
+    }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps !== this.props){
+            this.setStations();
         }
     }
 
     onMapLoad(map) {
-        // route
-        map.addSource('route', {
-            'type': 'geojson',
-            'data': this.routeData
-        });
-        map.addLayer({
-            'id': 'route',
-            'type': 'line',
-            'source': 'route',
-            'paint': {
-                'line-color': 'yellow',
-                'line-opacity': 0.75,
-                'line-width': 5
-            }
-        });
-
-        // stations
-        let stationService = new StationService();
-        let stations = stationService.getStations();
-        let stationsFeatures = []
-        stations.forEach(element => {
-            stationsFeatures.push({
-                "type": "Feature",
-                "id": element.id,
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [element.lng, element.lat]
-                },
-                "properties": {
-                    "city": element.city,
-                    "population": element.population,
-                    "travel_time": element.travel_time,
-                }
-            })
-        });
-
         map.addSource('stations', {
             'type': 'geojson',
             'data': {
                 'type': 'FeatureCollection',
-                'features': stationsFeatures
+                'features': []
             }
         });
         map.addLayer({
@@ -71,7 +33,44 @@ class Map extends Component {
             }
         });
         this.map = map;
+        this.setStations();
         this.forceUpdate();
+    }
+
+    setStations() {
+        let stationService = new StationService();
+        let stations = stationService.getStations();
+        let features = []
+        stations.forEach(element => {
+            if (
+                this.props.search &&
+                (
+                    (this.props.search.minPopulation && this.props.search.minPopulation > element.population) ||
+                    (this.props.search.maxPopulation && this.props.search.maxPopulation < element.population) ||
+                    (this.props.search.minTravelTime && this.props.search.minTravelTime > element.travelTime) ||
+                    (this.props.search.maxTravelTime && this.props.search.maxTravelTime < element.travelTime)
+                )
+            ) {
+                return;
+            }
+            features.push({
+                "type": "Feature",
+                "id": element.id,
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [element.lng, element.lat]
+                },
+                "properties": {
+                    "city": element.city,
+                    "population": element.population,
+                    "travelTime": element.travelTime,
+                }
+            })
+        });
+        this.map.getSource('stations').setData({
+            'type': 'FeatureCollection',
+            'features': features
+        })
     }
 
     handleStationClick(event) {
@@ -80,11 +79,6 @@ class Map extends Component {
             return;
         }
         this.props.onStationClick(features[0].properties);
-        this.routeData['geometry']['coordinates'] = [
-            this.origin,
-            [event.lngLat.lng, event.lngLat.lat]
-        ]
-        this.map.getSource('route').setData(this.routeData);
     }
 
     render() {
