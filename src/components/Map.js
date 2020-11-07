@@ -55,14 +55,15 @@ class Map extends Component {
             }
             features.push({
                 "type": "Feature",
-                "id": element.id,
+                "id": element.stationId,
                 "geometry": {
                     "type": "Point",
                     "coordinates": [element.lng, element.lat]
                 },
                 "properties": {
-                    "city": element.city,
-                    "population": element.population,
+                    "cityName": element.cityName,
+                    "stationName": element.stationName,
+                    "cityPopulation": element.cityPopulation,
                     "travelTime": element.travelTime,
                 }
             })
