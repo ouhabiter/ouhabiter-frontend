@@ -45,8 +45,8 @@ class Map extends Component {
             if (
                 this.props.search &&
                 (
-                    (this.props.search.minPopulation && this.props.search.minPopulation > element.population) ||
-                    (this.props.search.maxPopulation && this.props.search.maxPopulation < element.population) ||
+                    (this.props.search.minPopulation && this.props.search.minPopulation > element.cityPopulation) ||
+                    (this.props.search.maxPopulation && this.props.search.maxPopulation < element.cityPopulation) ||
                     (this.props.search.minTravelTime && this.props.search.minTravelTime > element.travelTime) ||
                     (this.props.search.maxTravelTime && this.props.search.maxTravelTime < element.travelTime)
                 )
