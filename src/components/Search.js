@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Field } from 'formik';
 
 class Search extends Component {
     doSearch(values) {
@@ -24,6 +24,10 @@ class Search extends Component {
                         Durée de voyage minimale <Field type="number" name="minTravelTime" /><br/>
                         Population maximale <Field type="number" name="maxPopulation" /><br/>
                         Population minimale <Field type="number" name="minPopulation" /><br/>
+                        Fibre <Field type="checkbox" name="hasFiber" /><br/>
+                        Montagne <Field type="checkbox" name="hasMountains" /><br/>
+                        Mer <Field type="checkbox" name="hasCoastline" /><br/>
+                        Lac <Field type="checkbox" name="hasLake" /><br/>
                         <button type="submit">Filtrer</button>
                     </form>
                 )}

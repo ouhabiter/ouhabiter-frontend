@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import City from './City.js';
+import Station from './Station.js';
 import Search from './Search.js';
 
 class SidePanel extends Component {
     render() {
         return (
-            <div style={{ height: "100vh", width: "50%"}}>
+            <div style={{ height: "60vh", width: "20%", position: "absolute", "z-index": "2", "background-color": "white", "margin-top": "20vh" }}>
                 <Search onSearchChange={this.props.onSearchChange}></Search>
-                { this.props.station && <City station={this.props.station} /> }
+                { this.props.station && <Station station={this.props.station} /> }
             </div>
         )
     }

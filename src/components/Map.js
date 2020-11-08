@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import MapboxMap from 'react-mapbox-wrapper';
-import StationService from '../services/StationService.js';
 
 class Map extends Component {
     constructor(props) {
@@ -11,7 +10,7 @@ class Map extends Component {
 
     componentDidUpdate(prevProps) {
         if (prevProps !== this.props){
-            this.setStations();
+            this.updateStations();
         }
     }
 
@@ -29,42 +28,33 @@ class Map extends Component {
             'source': 'stations',
             'layout': {
                 'icon-image': 'blue-dot',
-                'icon-allow-overlap': true,
+                // use ignore-placement instead of allow-overlap which makes symbols blink on search update
+                'icon-ignore-placement': true,
             }
         });
         this.map = map;
-        this.setStations();
+        this.updateStations();
         this.forceUpdate();
     }
 
-    setStations() {
-        let stationService = new StationService();
-        let stations = stationService.getStations();
-        let features = []
-        stations.forEach(element => {
-            if (
-                this.props.search &&
-                (
-                    (this.props.search.minPopulation && this.props.search.minPopulation > element.cityPopulation) ||
-                    (this.props.search.maxPopulation && this.props.search.maxPopulation < element.cityPopulation) ||
-                    (this.props.search.minTravelTime && this.props.search.minTravelTime > element.travelTime) ||
-                    (this.props.search.maxTravelTime && this.props.search.maxTravelTime < element.travelTime)
-                )
-            ) {
-                return;
-            }
+    updateStations() {
+        if (!this.props.stations) {
+            return;
+        }
+        let features = [];
+        this.props.stations.forEach(station => {
             features.push({
                 "type": "Feature",
-                "id": element.stationId,
+                "id": station.stationId,
                 "geometry": {
                     "type": "Point",
-                    "coordinates": [element.lng, element.lat]
+                    "coordinates": [station.lng, station.lat]
                 },
                 "properties": {
-                    "cityName": element.cityName,
-                    "stationName": element.stationName,
-                    "cityPopulation": element.cityPopulation,
-                    "travelTime": element.travelTime,
+                    "cityName": station.cityName,
+                    "stationName": station.stationName,
+                    "cityPopulation": station.cityPopulation,
+                    "travelTime": station.travelTime,
                 }
             })
         });
@@ -84,7 +74,7 @@ class Map extends Component {
 
     render() {
         return (
-            <div style={{ height: "100vh", width: "50%"}}>
+            <div style={{ height: "100vh", width: "100%"}}>
                 <MapboxMap
                     accessToken="pk.eyJ1IjoibWVpbGxldXJzYWdlbnRzIiwiYSI6ImNqMWV5YnRpMDAwMHkyeXRnd3JkdXRiaDEifQ.emcFsn3Ox6WcKmOHhbTOPQ"
                     zoom="5"
