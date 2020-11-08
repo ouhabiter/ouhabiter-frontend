@@ -7,9 +7,10 @@ import React, { Component } from 'react';
 class App extends Component {
   constructor(props) {
     super(props);
+    this.stationService = new StationService();
     this.state = {
       station: null,
-      stations: this.getStations(),
+      stations: this.stationService.getStations(),
       search: null
     };
     this.handleStationChange = this.handleStationChange.bind(this);
@@ -21,38 +22,11 @@ class App extends Component {
   }
 
   handleSearchChange(search) {
-    let stations = this.getStations(search);
+    let stations = this.stationService.search(search);
     this.setState({
       search: search,
       stations: stations
     });
-  }
-
-  getStations(search) {
-    let stationService = new StationService();
-    let stations = stationService.getStations();
-    let result = []
-    stations.forEach(station => {
-      if (
-        search &&
-        (
-          (search.minPopulation && search.minPopulation > station.cityPopulation) ||
-          (search.maxPopulation && search.maxPopulation < station.cityPopulation) ||
-          (search.minTravelTime && search.minTravelTime > station.travelTime) ||
-          (search.maxTravelTime && search.maxTravelTime < station.travelTime) ||
-          (search.hasFiber && !station.hasFiber) ||
-          (search.hasMountains && !station.hasMountains) ||
-          (search.hasLake && !station.hasLake) ||
-          (search.hasCoastline && !station.hasCoastline) ||
-          (search.hasCountryside && !station.hasCountryside) ||
-          (search.hasPark && !station.hasPark)
-        )
-      ) {
-        return;
-      }
-      result.push(station)
-    })
-    return result;
   }
 
   render() {

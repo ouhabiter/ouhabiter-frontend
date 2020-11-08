@@ -1,4 +1,4 @@
-class TimeService {
+class TimeHelper {
     static hoursToTimeString(hours) {
         var rhours = Math.floor(hours);
         var minutes = (hours - rhours) * 60;
@@ -10,4 +10,4 @@ class TimeService {
     }
 }
 
-export default TimeService;
+export default TimeHelper;

@@ -1,4 +1,30 @@
 class StationService {
+  search(search) {
+    let stations = this.getStations();
+    let result = []
+    stations.forEach(station => {
+      if (
+        search &&
+        (
+          (search.minPopulation && search.minPopulation > station.cityPopulation) ||
+          (search.maxPopulation && search.maxPopulation < station.cityPopulation) ||
+          (search.minTravelTime && search.minTravelTime > station.travelTime) ||
+          (search.maxTravelTime && search.maxTravelTime < station.travelTime) ||
+          (search.hasFiber && !station.hasFiber) ||
+          (search.hasMountains && !station.hasMountains) ||
+          (search.hasLake && !station.hasLake) ||
+          (search.hasCoastline && !station.hasCoastline) ||
+          (search.hasCountryside && !station.hasCountryside) ||
+          (search.hasPark && !station.hasPark)
+        )
+      ) {
+        return;
+      }
+      result.push(station)
+    })
+    return result;
+  }
+
   getStations() {
     return [
         {
