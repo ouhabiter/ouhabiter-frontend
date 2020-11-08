@@ -27,7 +27,7 @@ class Map extends Component {
             'type': 'symbol',
             'source': 'stations',
             'layout': {
-                'icon-image': 'blue-dot',
+                'icon-image': 'rail',
                 // use ignore-placement instead of allow-overlap which makes symbols blink on search update
                 'icon-ignore-placement': true,
             }
@@ -78,7 +78,7 @@ class Map extends Component {
                 <MapboxMap
                     accessToken="pk.eyJ1IjoibWVpbGxldXJzYWdlbnRzIiwiYSI6ImNqMWV5YnRpMDAwMHkyeXRnd3JkdXRiaDEifQ.emcFsn3Ox6WcKmOHhbTOPQ"
                     zoom="5"
-                    style="mapbox://styles/meilleursagents/cjfm7js7u0o552snxqa6g7vxr"
+                    style="mapbox://styles/meilleursagents/ckh97k06n0lw019n0kig2wiop"
                     coordinates={{ lat: 48.8565848333607, lng: 2.34298812806494 }}
                     onLoad={this.onMapLoad}
                     onClick={this.handleStationClick}
