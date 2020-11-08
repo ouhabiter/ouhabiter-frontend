@@ -11,10 +11,14 @@ class StationService {
           (search.minTravelTime && search.minTravelTime > station.travelTime) ||
           (search.maxTravelTime && search.maxTravelTime < station.travelTime) ||
           (search.hasFiber && !station.hasFiber) ||
+          (search.noFiber && station.hasFiber) ||
           (search.hasMountains && !station.hasMountains) ||
+          (search.noMountains && station.hasMountains) ||
           (search.hasLake && !station.hasLake) ||
           (search.hasCoastline && !station.hasCoastline) ||
+          (search.noCoastline && station.hasCoastline) ||
           (search.hasCountryside && !station.hasCountryside) ||
+          (search.noCountryside && station.hasCountryside) ||
           (search.hasPark && !station.hasPark)
         )
       ) {

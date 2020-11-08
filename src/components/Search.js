@@ -24,12 +24,16 @@ class Search extends Component {
                         Durée de voyage minimale (depuis Paris) <Field type="number" name="minTravelTime" /><br/>
                         Population maximale <Field type="number" name="maxPopulation" /><br/>
                         Population minimale <Field type="number" name="minPopulation" /><br/>
-                        Fibre <Field type="checkbox" name="hasFiber" /><br/>
-                        Montagne <Field type="checkbox" name="hasMountains" /><br/>
-                        Mer <Field type="checkbox" name="hasCoastline" /><br/>
-                        Grand lac <Field type="checkbox" name="hasLake" /><br/>
+                        Ville avec la fibre <Field type="checkbox" name="hasFiber" /><br/>
+                        Ville sans la fibre <Field type="checkbox" name="noFiber" /><br/>
+                        À la montagne <Field type="checkbox" name="hasMountains" /><br/>
+                        Pas à la montagne <Field type="checkbox" name="noMountains" /><br/>
+                        Sur la côte <Field type="checkbox" name="hasCoastline" /><br/>
+                        Pas sur la côte <Field type="checkbox" name="noCoastline" /><br/>
+                        À côté d'un grand lac<Field type="checkbox" name="hasLake" /><br/>
                         Campagne <Field type="checkbox" name="hasCountryside" /><br/>
-                        Parc naturel <Field type="checkbox" name="hasPark" /><br/>
+                        En ville <Field type="checkbox" name="noCountryside" /><br/>
+                        Dans un parc naturel <Field type="checkbox" name="hasPark" /><br/>
                         <button type="submit">Filtrer</button>
                     </form>
                 )}
