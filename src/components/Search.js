@@ -28,6 +28,8 @@ class Search extends Component {
                         Montagne <Field type="checkbox" name="hasMountains" /><br/>
                         Mer <Field type="checkbox" name="hasCoastline" /><br/>
                         Lac <Field type="checkbox" name="hasLake" /><br/>
+                        Campagne <Field type="checkbox" name="hasCountryside" /><br/>
+                        Parc naturel <Field type="checkbox" name="hasPark" /><br/>
                         <button type="submit">Filtrer</button>
                     </form>
                 )}

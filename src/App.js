@@ -43,7 +43,9 @@ class App extends Component {
           (search.hasFiber && !station.hasFiber) ||
           (search.hasMountains && !station.hasMountains) ||
           (search.hasLake && !station.hasLake) ||
-          (search.hasCoastline && !station.hasCoastline)
+          (search.hasCoastline && !station.hasCoastline) ||
+          (search.hasCountryside && !station.hasCountryside) ||
+          (search.hasPark && !station.hasPark)
         )
       ) {
         return;
