@@ -5,7 +5,7 @@ import Search from './Search.js';
 class SidePanel extends Component {
     render() {
         return (
-            <div style={{ height: "60vh", width: "20%", position: "absolute", "z-index": "2", "background-color": "white", "margin-top": "20vh" }}>
+            <div style={{ height: "60vh", width: "24%", position: "absolute", "z-index": "2", "background-color": "white", "margin-top": "20vh" }}>
                 <Search onSearchChange={this.props.onSearchChange}></Search>
                 { this.props.station && <Station station={this.props.station} /> }
             </div>
