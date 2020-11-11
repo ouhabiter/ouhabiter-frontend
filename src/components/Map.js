@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import MapboxMap from 'react-mapbox-wrapper';
+import MapHelper from '../helpers/MapHelper';
 
 class Map extends Component {
     constructor(props) {
@@ -15,6 +16,7 @@ class Map extends Component {
     }
 
     onMapLoad(map) {
+        // layer order is important, current station must be last to be above all the other layers
         map.addSource('stations', {
             'type': 'geojson',
             'data': {
@@ -48,8 +50,24 @@ class Map extends Component {
                 'line-cap': 'round'
             },
             'paint': {
-                'line-color': '#888',
-                'line-width': 8
+                'line-color': '#000',
+                'line-width': 4
+            }
+        });
+        map.addSource('station', {
+            'type': 'geojson',
+            'data': {
+                'type': 'Feature'
+            }
+        });
+        map.addLayer({
+            'id': 'station',
+            'type': 'symbol',
+            'source': 'station',
+            'layout': {
+                'icon-image': 'rail',
+                // use ignore-placement instead of allow-overlap which makes symbols blink on search update
+                'icon-ignore-placement': true,
             }
         });
         this.map = map;
@@ -63,21 +81,7 @@ class Map extends Component {
         }
         let features = [];
         this.props.stations.forEach(station => {
-            features.push({
-                "type": "Feature",
-                "id": station.stationId,
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [station.lng, station.lat]
-                },
-                "properties": {
-                    "cityName": station.cityName,
-                    "stationName": station.stationName,
-                    "cityPopulation": station.cityPopulation,
-                    "travelTime": station.travelTime,
-                    "itinerary": station.itinerary,
-                }
-            })
+            features.push(MapHelper.stationToFeature(station))
         });
         this.map.getSource('stations').setData({
             'type': 'FeatureCollection',
@@ -90,9 +94,10 @@ class Map extends Component {
         if (features.length === 0) {
             return;
         }
-        let feature = features[0].properties;
-        this.props.onStationClick(feature);
-        this.map.getSource('itinerary').setData(JSON.parse(feature.itinerary));
+        let feature = features[0];
+        this.props.onStationClick(feature.properties);
+        this.map.getSource('itinerary').setData(JSON.parse(feature.properties.itinerary));
+        this.map.getSource('station').setData(feature);
     }
 
     render() {
