@@ -32,6 +32,26 @@ class Map extends Component {
                 'icon-ignore-placement': true,
             }
         });
+        map.addSource('itinerary', {
+            'type': 'geojson',
+            'data': {
+                'type': 'LineString',
+                'coordinates': []
+            }
+        });
+        map.addLayer({
+            'id': 'itinerary',
+            'type': 'line',
+            'source': 'itinerary',
+            'layout': {
+                'line-join': 'round',
+                'line-cap': 'round'
+            },
+            'paint': {
+                'line-color': '#888',
+                'line-width': 8
+            }
+        });
         this.map = map;
         this.updateStations();
         this.forceUpdate();
@@ -55,6 +75,7 @@ class Map extends Component {
                     "stationName": station.stationName,
                     "cityPopulation": station.cityPopulation,
                     "travelTime": station.travelTime,
+                    "itinerary": station.itinerary,
                 }
             })
         });
@@ -69,7 +90,9 @@ class Map extends Component {
         if (features.length === 0) {
             return;
         }
-        this.props.onStationClick(features[0].properties);
+        let feature = features[0].properties;
+        this.props.onStationClick(feature);
+        this.map.getSource('itinerary').setData(JSON.parse(feature.itinerary));
     }
 
     render() {
