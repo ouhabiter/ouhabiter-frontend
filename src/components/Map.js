@@ -26,12 +26,22 @@ class Map extends Component {
         });
         map.addLayer({
             'id': 'stations',
-            'type': 'symbol',
+            'type': 'circle',
             'source': 'stations',
-            'layout': {
-                'icon-image': 'rail',
-                // use ignore-placement instead of allow-overlap which makes symbols blink on search update
-                'icon-ignore-placement': true,
+            'paint': {
+                'circle-color': [
+                    'step',
+                    ['get', 'travelTime'],
+                    '#0a7f26',
+                    1,
+                    '#3c9809',
+                    2,
+                    '#acb207',
+                    4,
+                    '#cb5804',
+                    6,
+                    '#e50029'
+                ]
             }
         });
         map.addSource('itinerary', {
