@@ -20,10 +20,10 @@ class Search extends Component {
                     handleSubmit
                 }) => (
                     <form onSubmit={handleSubmit}>
-                        Durée de voyage maximale (depuis Paris) <Field type="number" name="maxTravelTime" /><br/>
                         Durée de voyage minimale (depuis Paris) <Field type="number" name="minTravelTime" /><br/>
-                        Population maximale <Field type="number" name="maxPopulation" /><br/>
+                        Durée de voyage maximale (depuis Paris) <Field type="number" name="maxTravelTime" /><br/>
                         Population minimale <Field type="number" name="minPopulation" /><br/>
+                        Population maximale <Field type="number" name="maxPopulation" /><br/>
                         Ville avec la fibre <Field type="checkbox" name="hasFiber" /><br/>
                         Ville sans la fibre <Field type="checkbox" name="noFiber" /><br/>
                         À la montagne <Field type="checkbox" name="hasMountains" /><br/>
