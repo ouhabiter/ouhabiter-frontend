@@ -12,6 +12,7 @@ class Map extends Component {
     componentDidUpdate(prevProps) {
         if (prevProps !== this.props){
             this.updateStations();
+            this.updateColorScale();
         }
     }
 
@@ -29,19 +30,14 @@ class Map extends Component {
             'type': 'circle',
             'source': 'stations',
             'paint': {
-                'circle-color': [
-                    'step',
-                    ['get', 'travelTime'],
-                    '#0a7f26',
-                    1,
-                    '#3c9809',
-                    2,
-                    '#acb207',
-                    4,
-                    '#cb5804',
-                    6,
-                    '#e50029'
-                ]
+                'circle-radius': {
+                    'base': 3,
+                    'stops': [
+                        [8, 4],
+                        [10, 10],
+                        [22, 180]
+                    ]
+                },
             }
         });
         map.addSource('itinerary', {
@@ -64,24 +60,9 @@ class Map extends Component {
                 'line-width': 4
             }
         });
-        map.addSource('station', {
-            'type': 'geojson',
-            'data': {
-                'type': 'Feature'
-            }
-        });
-        map.addLayer({
-            'id': 'station',
-            'type': 'symbol',
-            'source': 'station',
-            'layout': {
-                'icon-image': 'rail',
-                // use ignore-placement instead of allow-overlap which makes symbols blink on search update
-                'icon-ignore-placement': true,
-            }
-        });
         this.map = map;
         this.updateStations();
+        this.updateColorScale();
         this.forceUpdate();
     }
 
@@ -99,6 +80,26 @@ class Map extends Component {
         })
     }
 
+    updateColorScale() {
+        let start = this.props.minTravelTime ? this.props.minTravelTime : 0;
+        let step = this.props.maxTravelTime ? (this.props.maxTravelTime - start) / 4 : 2;
+        console.log(start, step, this.props);
+        let paintProperty = [
+            'step',
+            ['get', 'travelTime'],
+            '#0a7f26',
+            start + step,
+            '#3c9809',
+            start + step * 2,
+            '#acb207',
+            start + step * 3,
+            '#cb5804',
+            start + step * 4,
+            '#e50029'
+        ]
+        this.map.setPaintProperty('stations', 'circle-color', paintProperty);
+    }
+
     handleStationClick(event) {
         let features = this.map.queryRenderedFeatures(event.point, {layers: ['stations']});
         if (features.length === 0) {
@@ -107,7 +108,6 @@ class Map extends Component {
         let feature = features[0];
         this.props.onStationClick(feature.properties);
         this.map.getSource('itinerary').setData(JSON.parse(feature.properties.itinerary));
-        this.map.getSource('station').setData(feature);
     }
 
     render() {
@@ -116,7 +116,7 @@ class Map extends Component {
                 <MapboxMap
                     accessToken="pk.eyJ1IjoibWVpbGxldXJzYWdlbnRzIiwiYSI6ImNqMWV5YnRpMDAwMHkyeXRnd3JkdXRiaDEifQ.emcFsn3Ox6WcKmOHhbTOPQ"
                     zoom="5"
-                    style="mapbox://styles/meilleursagents/ckh97k06n0lw019n0kig2wiop"
+                    style="mapbox://styles/meilleursagents/ckhf5i46501mv1apg8er3v1b1"
                     coordinates={{ lat: 48.8565848333607, lng: 2.34298812806494 }}
                     onLoad={this.onMapLoad}
                     onClick={this.handleStationClick}
