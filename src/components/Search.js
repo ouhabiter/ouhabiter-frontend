@@ -1,7 +1,18 @@
 import React, { Component } from 'react';
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form, Field, useFormikContext } from 'formik';
 import { Button, Typography } from '@material-ui/core';
 import { TextField, CheckboxWithLabel } from 'formik-material-ui';
+
+const AutoSave = () => {
+    const formik = useFormikContext();
+
+    React.useEffect(() => {
+        if (formik.values !== formik.initialValues) {
+            formik.submitForm();
+        }
+    }, [formik.values]);
+    return null;
+}
 
 class Search extends Component {
     doSearch(values) {
@@ -21,7 +32,8 @@ class Search extends Component {
                 {({
                     handleSubmit
                 }) => (
-                    <Form onSubmit={handleSubmit}>
+                    <Form onSubmit={handleSubmit} onChange={this.handleFormChange}>
+                        <AutoSave/>
                         <Field
                             component={TextField}
                             type="number"

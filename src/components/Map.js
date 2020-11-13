@@ -85,7 +85,6 @@ class Map extends Component {
     updateColorScale() {
         let start = this.props.minTravelTime ? this.props.minTravelTime : 0;
         let step = this.props.maxTravelTime ? (this.props.maxTravelTime - start) / 5 : 1.5;
-        console.log(start, step, this.props);
         let paintProperty = [
             'step',
             ['get', 'travelTime'],
