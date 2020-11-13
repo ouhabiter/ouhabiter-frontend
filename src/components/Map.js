@@ -58,7 +58,7 @@ class Map extends Component {
                 'line-cap': 'round'
             },
             'paint': {
-                'line-color': '#000',
+                'line-color': '#33302E',
                 'line-width': 4
             }
         });
