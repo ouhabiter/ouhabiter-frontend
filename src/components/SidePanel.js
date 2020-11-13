@@ -6,7 +6,16 @@ import Divider from '@material-ui/core/Divider';
 class SidePanel extends Component {
     render() {
         return (
-            <div style={{ height: "80vh", width: "20%", position: "absolute", "z-index": "2", "background-color": "white", "margin-top": "10vh", padding: 10 }}>
+            <div style={{
+                height: "78vh",
+                width: "20%",
+                position: "absolute",
+                "z-index": "2",
+                "background-color": "white",
+                "margin-top": "12vh",
+                padding: 10,
+                "box-shadow": "3px 3px 3px #cccccc"
+            }}>
                 <Search onSearchChange={this.props.onSearchChange}></Search>
                 { this.props.station && 
                     <div>
