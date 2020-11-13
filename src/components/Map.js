@@ -118,7 +118,7 @@ class Map extends Component {
                 <MapboxMap
                     accessToken="pk.eyJ1IjoibWVpbGxldXJzYWdlbnRzIiwiYSI6ImNqMWV5YnRpMDAwMHkyeXRnd3JkdXRiaDEifQ.emcFsn3Ox6WcKmOHhbTOPQ"
                     zoom="5"
-                    style="mapbox://styles/meilleursagents/ckhf5i46501mv1apg8er3v1b1"
+                    mapboxStyle="mapbox://styles/meilleursagents/ckhf5i46501mv1apg8er3v1b1"
                     coordinates={{ lat: 46.227638, lng: 2.213749 }}
                     onLoad={this.onMapLoad}
                     onClick={this.handleStationClick}
