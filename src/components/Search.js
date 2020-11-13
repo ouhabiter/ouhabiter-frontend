@@ -28,7 +28,7 @@ class Search extends Component {
                             name="minTravelTime"
                             label="Temps de trajet minimal"
                             disabled={false}
-                            style={{ width: "75%"}}
+                            style={{ width: "95%"}}
                         /><br/>
                         <Field
                             component={TextField}
@@ -36,7 +36,7 @@ class Search extends Component {
                             name="maxTravelTime"
                             label="Temps de trajet maximal"
                             disabled={false}
-                            style={{ width: "75%"}}
+                            style={{ width: "95%"}}
                         /><br/>
                         <Field
                             component={TextField}
@@ -44,7 +44,7 @@ class Search extends Component {
                             name="minPopulation"
                             label="Population minimale"
                             disabled={false}
-                            style={{ width: "75%"}}
+                            style={{ width: "95%"}}
                         /><br/>
                         <Field
                             component={TextField}
@@ -52,9 +52,9 @@ class Search extends Component {
                             name="maxPopulation"
                             label="Population maximale"
                             disabled={false}
-                            style={{ width: "75%"}}
+                            style={{ width: "95%"}}
                         /><br/>
-                        <div style={{ display: "flex" }}>
+                        <div style={{ display: "flex", "margin-top": 10 }}>
                             <div>
                                 <Field
                                     component={CheckboxWithLabel}
@@ -66,8 +66,8 @@ class Search extends Component {
                                 <Field
                                     component={CheckboxWithLabel}
                                     type="checkbox"
-                                    name="noFiber"
-                                    Label={{ label: "Sans la fibre" }}
+                                    name="hasCountryside"
+                                    Label={{ label: "À la campagne" }}
                                     disabled={false}
                                 /><br/>
                                 <Field
@@ -80,13 +80,6 @@ class Search extends Component {
                                 <Field
                                     component={CheckboxWithLabel}
                                     type="checkbox"
-                                    name="noMountains"
-                                    Label={{ label: "Pas à la montagne" }}
-                                    disabled={false}
-                                /><br/>
-                                <Field
-                                    component={CheckboxWithLabel}
-                                    type="checkbox"
                                     name="hasCoastline"
                                     Label={{ label: "À la mer" }}
                                     disabled={false}
@@ -94,17 +87,17 @@ class Search extends Component {
                                 <Field
                                     component={CheckboxWithLabel}
                                     type="checkbox"
-                                    name="noCoastline"
-                                    Label={{ label: "Pas à la mer" }}
+                                    name="hasLake"
                                     disabled={false}
+                                    Label={{ label: "Près d'un grand lac" }}
                                 /><br/>
                             </div>
                             <div>
                                 <Field
                                     component={CheckboxWithLabel}
                                     type="checkbox"
-                                    name="hasCountryside"
-                                    Label={{ label: "À la campagne" }}
+                                    name="noFiber"
+                                    Label={{ label: "Sans la fibre" }}
                                     disabled={false}
                                 /><br/>
                                 <Field
@@ -117,16 +110,23 @@ class Search extends Component {
                                 <Field
                                     component={CheckboxWithLabel}
                                     type="checkbox"
-                                    name="hasPark"
-                                    Label={{ label: "Dans un parc naturel" }}
+                                    name="noMountains"
+                                    Label={{ label: "Pas à la montagne" }}
                                     disabled={false}
                                 /><br/>
                                 <Field
                                     component={CheckboxWithLabel}
                                     type="checkbox"
-                                    name="hasLake"
+                                    name="noCoastline"
+                                    Label={{ label: "Pas à la mer" }}
                                     disabled={false}
-                                    Label={{ label: "Près d'un grand lac" }}
+                                /><br/>
+                                <Field
+                                    component={CheckboxWithLabel}
+                                    type="checkbox"
+                                    name="hasPark"
+                                    Label={{ label: "Dans un parc naturel" }}
+                                    disabled={false}
                                 /><br/>
                             </div>
                         </div>
@@ -135,6 +135,7 @@ class Search extends Component {
                             color="primary"
                             type="submit"
                             disabled={false}
+                            style={{ "margin-top": 10 }}
                         >Filtrer</Button>
                     </Form>
                 )}

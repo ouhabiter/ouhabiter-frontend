@@ -7,7 +7,7 @@ class Station extends Component {
         return (
             <div>
                 <Typography variant="h5">Sélection</Typography>
-                <TableContainer component={Paper}>
+                <TableContainer component={Paper} style={{ "margin-top": 10 }}>
                     <Table>
                         <TableBody>
                             <TableRow>
