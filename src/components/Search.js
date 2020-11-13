@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { Formik, Field } from 'formik';
+import { Formik, Form, Field } from 'formik';
+import { Button, Typography } from '@material-ui/core';
+import { TextField, CheckboxWithLabel } from 'formik-material-ui';
 
 class Search extends Component {
     doSearch(values) {
@@ -9,7 +11,7 @@ class Search extends Component {
     render() {
         return (
             <div>
-                <h2>Recherche</h2>
+                <Typography variant="h5">Recherche</Typography>
                 <Formik
                     initialValues={{ travelTime: '', population: '' }}
                     onSubmit={(values) => {
@@ -19,23 +21,122 @@ class Search extends Component {
                 {({
                     handleSubmit
                 }) => (
-                    <form onSubmit={handleSubmit}>
-                        Durée de voyage minimale (depuis Paris) <Field type="number" name="minTravelTime" /><br/>
-                        Durée de voyage maximale (depuis Paris) <Field type="number" name="maxTravelTime" /><br/>
-                        Population minimale <Field type="number" name="minPopulation" /><br/>
-                        Population maximale <Field type="number" name="maxPopulation" /><br/>
-                        Ville avec la fibre <Field type="checkbox" name="hasFiber" /><br/>
-                        Ville sans la fibre <Field type="checkbox" name="noFiber" /><br/>
-                        À la montagne <Field type="checkbox" name="hasMountains" /><br/>
-                        Pas à la montagne <Field type="checkbox" name="noMountains" /><br/>
-                        Sur la côte <Field type="checkbox" name="hasCoastline" /><br/>
-                        Pas sur la côte <Field type="checkbox" name="noCoastline" /><br/>
-                        À côté d'un grand lac<Field type="checkbox" name="hasLake" /><br/>
-                        Campagne <Field type="checkbox" name="hasCountryside" /><br/>
-                        En ville <Field type="checkbox" name="noCountryside" /><br/>
-                        Dans un parc naturel <Field type="checkbox" name="hasPark" /><br/>
-                        <button type="submit">Filtrer</button>
-                    </form>
+                    <Form onSubmit={handleSubmit}>
+                        <Field
+                            component={TextField}
+                            type="number"
+                            name="minTravelTime"
+                            label="Temps de trajet minimal"
+                            disabled={false}
+                            style={{ width: "75%"}}
+                        /><br/>
+                        <Field
+                            component={TextField}
+                            type="number"
+                            name="maxTravelTime"
+                            label="Temps de trajet maximal"
+                            disabled={false}
+                            style={{ width: "75%"}}
+                        /><br/>
+                        <Field
+                            component={TextField}
+                            type="number"
+                            name="minPopulation"
+                            label="Population minimale"
+                            disabled={false}
+                            style={{ width: "75%"}}
+                        /><br/>
+                        <Field
+                            component={TextField}
+                            type="number"
+                            name="maxPopulation"
+                            label="Population maximale"
+                            disabled={false}
+                            style={{ width: "75%"}}
+                        /><br/>
+                        <div style={{ display: "flex" }}>
+                            <div>
+                                <Field
+                                    component={CheckboxWithLabel}
+                                    type="checkbox"
+                                    name="hasFiber"
+                                    Label={{ label: "Avec la fibre" }}
+                                    disabled={false}
+                                /><br/>
+                                <Field
+                                    component={CheckboxWithLabel}
+                                    type="checkbox"
+                                    name="noFiber"
+                                    Label={{ label: "Sans la fibre" }}
+                                    disabled={false}
+                                /><br/>
+                                <Field
+                                    component={CheckboxWithLabel}
+                                    type="checkbox"
+                                    name="hasMountains"
+                                    Label={{ label: "À la montagne" }}
+                                    disabled={false}
+                                /><br/>
+                                <Field
+                                    component={CheckboxWithLabel}
+                                    type="checkbox"
+                                    name="noMountains"
+                                    Label={{ label: "Pas à la montagne" }}
+                                    disabled={false}
+                                /><br/>
+                                <Field
+                                    component={CheckboxWithLabel}
+                                    type="checkbox"
+                                    name="hasCoastline"
+                                    Label={{ label: "À la mer" }}
+                                    disabled={false}
+                                /><br/>
+                                <Field
+                                    component={CheckboxWithLabel}
+                                    type="checkbox"
+                                    name="noCoastline"
+                                    Label={{ label: "Pas à la mer" }}
+                                    disabled={false}
+                                /><br/>
+                            </div>
+                            <div>
+                                <Field
+                                    component={CheckboxWithLabel}
+                                    type="checkbox"
+                                    name="hasCountryside"
+                                    Label={{ label: "À la campagne" }}
+                                    disabled={false}
+                                /><br/>
+                                <Field
+                                    component={CheckboxWithLabel}
+                                    type="checkbox"
+                                    name="noCountryside"
+                                    Label={{ label: "En ville" }}
+                                    disabled={false}
+                                /><br/>
+                                <Field
+                                    component={CheckboxWithLabel}
+                                    type="checkbox"
+                                    name="hasPark"
+                                    Label={{ label: "Dans un parc naturel" }}
+                                    disabled={false}
+                                /><br/>
+                                <Field
+                                    component={CheckboxWithLabel}
+                                    type="checkbox"
+                                    name="hasLake"
+                                    disabled={false}
+                                    Label={{ label: "Près d'un grand lac" }}
+                                /><br/>
+                            </div>
+                        </div>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            type="submit"
+                            disabled={false}
+                        >Filtrer</Button>
+                    </Form>
                 )}
                 </Formik>
             </div>

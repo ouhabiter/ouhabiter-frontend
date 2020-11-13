@@ -3,6 +3,7 @@ import Map from './components/Map.js'
 import SidePanel from './components/SidePanel.js'
 import StationService from './services/StationService.js';
 import React, { Component } from 'react';
+import 'fontsource-roboto';
 
 class App extends Component {
   constructor(props) {
