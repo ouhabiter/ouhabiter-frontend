@@ -1,10 +1,9 @@
 .SidePanel {
-    height: 78vh;
-    width: 20%;
+    height: 100vh;
+    width: 25%;
     position: absolute;
     z-index: 2;
     background-color: white;
-    margin-top: 11vh;
     box-shadow: 3px 3px 3px #cccccc;
 }
 

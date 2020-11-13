@@ -22,7 +22,6 @@ class Search extends Component {
     render() {
         return (
             <div>
-                <Typography variant="h5">Recherche</Typography>
                 <Formik
                     initialValues={{ travelTime: '', population: '' }}
                     onSubmit={(values) => {
