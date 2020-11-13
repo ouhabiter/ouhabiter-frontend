@@ -127,7 +127,11 @@ class Map extends Component {
         this.props.onStationClick(feature.properties);
         this.map.getSource('itinerary').setData(JSON.parse(feature.properties.itinerary));
         CityService.getCityOutline(feature.properties.cityInseeCode).then((cityOutline) => {
-            this.map.getSource('city-outline').setData(cityOutline);
+            if (cityOutline) {
+                this.map.getSource('city-outline').setData(cityOutline);
+            } else {
+                this.map.getSource('city-outline').setData({'type': 'Polygon', 'coordinates': []});
+            }
         });
     }
 

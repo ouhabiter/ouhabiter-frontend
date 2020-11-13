@@ -12,6 +12,8 @@ class CityService {
             }
         }).then((response) => {
             return response.data.contour;
+        }).catch(function (error) {
+            return null;
         });
     }
 }
