@@ -82,20 +82,22 @@ class Map extends Component {
 
     updateColorScale() {
         let start = this.props.minTravelTime ? this.props.minTravelTime : 0;
-        let step = this.props.maxTravelTime ? (this.props.maxTravelTime - start) / 4 : 2;
+        let step = this.props.maxTravelTime ? (this.props.maxTravelTime - start) / 5 : 1.5;
         console.log(start, step, this.props);
         let paintProperty = [
             'step',
             ['get', 'travelTime'],
-            '#0a7f26',
+            '#10a908',
             start + step,
-            '#3c9809',
-            start + step * 2,
-            '#acb207',
+            '#5eba08',
+            start + step * 1.5,
+            '#b9c908',
             start + step * 3,
-            '#cb5804',
-            start + step * 4,
-            '#e50029'
+            '#da9209',
+            start + step * 4.5,
+            '#e93c09',
+            start + step * 6,
+            '#f9093a'
         ]
         this.map.setPaintProperty('stations', 'circle-color', paintProperty);
     }
