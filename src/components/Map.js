@@ -30,6 +30,8 @@ class Map extends Component {
             'type': 'circle',
             'source': 'stations',
             'paint': {
+                'circle-stroke-width': 1,
+                'circle-stroke-color': '#000',
                 'circle-radius': {
                     'base': 3,
                     'stops': [
@@ -89,14 +91,12 @@ class Map extends Component {
             ['get', 'travelTime'],
             '#10a908',
             start + step,
-            '#5eba08',
-            start + step * 1.5,
-            '#b9c908',
+            '#ddd700',
             start + step * 3,
-            '#da9209',
-            start + step * 4.5,
+            '#FEA234',
+            start + step * 5,
             '#e93c09',
-            start + step * 6,
+            start + step * 7,
             '#f9093a'
         ]
         this.map.setPaintProperty('stations', 'circle-color', paintProperty);
