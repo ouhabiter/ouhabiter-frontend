@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import MapboxMap from 'react-mapbox-wrapper';
 import MapHelper from '../helpers/MapHelper';
+import CityService from '../services/CityService';
 
 class Map extends Component {
     constructor(props) {
@@ -59,7 +60,23 @@ class Map extends Component {
             },
             'paint': {
                 'line-color': '#33302E',
-                'line-width': 4
+                'line-width': 3
+            }
+        });
+        map.addSource('city-outline', {
+            'type': 'geojson',
+            'data': {
+                'type': 'Polygon',
+                'coordinates': []
+            }
+        });
+        map.addLayer({
+            'id': 'city-outline',
+            'type': 'line',
+            'source': 'city-outline',
+            'paint': {
+                'line-color': '#000000',
+                'line-width': 1,
             }
         });
         this.map = map;
@@ -109,6 +126,9 @@ class Map extends Component {
         let feature = features[0];
         this.props.onStationClick(feature.properties);
         this.map.getSource('itinerary').setData(JSON.parse(feature.properties.itinerary));
+        CityService.getCityOutline(feature.properties.cityInseeCode).then((cityOutline) => {
+            this.map.getSource('city-outline').setData(cityOutline);
+        });
     }
 
     render() {

@@ -13,6 +13,7 @@ class MapHelper {
                 "cityPopulation": station.cityPopulation,
                 "travelTime": station.travelTime,
                 "itinerary": station.itinerary,
+                "cityInseeCode": station.cityInseeCode,
             }
         }
     }
