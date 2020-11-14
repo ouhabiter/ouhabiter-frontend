@@ -6,29 +6,42 @@ import Box from '@material-ui/core/Box';
 import Collapse from '@material-ui/core/Collapse';
 import CloseIcon from '@material-ui/icons/Close';
 import IconButton from '@material-ui/core/IconButton';
+import { withRouter } from "react-router-dom";
+import StationService from '../services/StationService';
 
 class SidePanel extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            searchActive: true
-        }
         this.handleCloseStation = this.handleCloseStation.bind(this);
+        this.stationService = new StationService();
+        let station = null;
+        let searchActive = true;
+        if (props.match.params.destination) {
+            station = this.stationService.getStationBySlug(props.match.params.destination);
+            if (station) {
+                searchActive = false;
+            }
+        }
+        this.state = {
+            searchActive: searchActive,
+            station: station,
+        }
     }
 
     componentDidUpdate(prevProps) {
-        // TODO better way to do this?
-        if (!prevProps.station && this.props.station) { // first station
+        if (
+            (!prevProps.match.params.destination && this.props.match.params.destination) || // first destination
+            (prevProps.match.params.destination !== this.props.match.params.destination) // new destination
+        ) {
+            let station = this.stationService.getStationBySlug(this.props.match.params.destination);
             this.setState({
-                searchActive: false
+                searchActive: false,
+                station: station
             });
-        } else if (this.props.station && prevProps.station && prevProps.station.id !== this.props.station.id) { // new station
+        } else if (prevProps.match.params.destination && !this.props.match.params.destination) { // no destination anymore
             this.setState({
-                searchActive: false
-            });
-        } else if (prevProps.station && !this.props.station) { // no station anymore
-            this.setState({
-                searchActive: true
+                searchActive: true,
+                station: null,
             });
         }
     }
@@ -50,7 +63,7 @@ class SidePanel extends Component {
                         <Box display="flex" justifyContent="flex-end">
                             <IconButton onClick={this.handleCloseStation}><CloseIcon /></IconButton>
                         </Box>
-                        <Station station={this.props.station} />
+                        <Station station={this.state.station} />
                     </Box>
                 }
             </Box>
@@ -58,4 +71,4 @@ class SidePanel extends Component {
     }
 }
 
-export default SidePanel;
+export default withRouter(SidePanel);

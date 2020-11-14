@@ -5,13 +5,16 @@ import MapboxMap from 'react-mapbox-wrapper';
 import MapHelper from '../helpers/MapHelper';
 import TimeHelper from '../helpers/TimeHelper';
 import CityService from '../services/CityService';
+import { withRouter } from "react-router-dom";
 import './Map.css';
+import StationService from '../services/StationService';
 
 class Map extends Component {
     constructor(props) {
         super(props);
         this.onMapLoad = this.onMapLoad.bind(this);
         this.handleMapClick = this.handleMapClick.bind(this);
+        this.stationService = new StationService();
         this.state = {
             colorScale: null
         }
@@ -21,6 +24,9 @@ class Map extends Component {
         if (prevProps !== this.props){
             this.updateStations();
             this.updateColorScale();
+            if (this.props.match.params.destination !== prevProps.match.params.destination) {
+                this.setStation(this.props.match.params.destination);
+            }
         }
     }
 
@@ -90,6 +96,7 @@ class Map extends Component {
         this.updateStations();
         this.updateColorScale();
         this.forceUpdate();
+        this.setStation(this.props.match.params.destination);
     }
 
     updateStations() {
@@ -124,15 +131,23 @@ class Map extends Component {
         if (features.length === 0) {
             this.map.getLayer('itinerary').setLayoutProperty('visibility', 'none');
             this.map.getLayer('city-outline').setLayoutProperty('visibility', 'none');
-            this.props.onStationClick(null);
+            this.props.history.push('')
             return;
         }
-        let feature = features[0];
-        this.props.onStationClick(feature.properties);
-        this.map.getSource('itinerary').setData(JSON.parse(feature.properties.itinerary));
+        let stationSlug = this.stationService.getSlugFromId(features[0].properties.id);
+        this.setStation(stationSlug);
+    }
+
+    setStation(stationSlug) {
+        let station = this.stationService.getStationBySlug(stationSlug);
+        if (!station) {
+            return;
+        }
+        this.props.history.push(`/paris/${stationSlug}`)
+        this.map.getSource('itinerary').setData(station.itinerary);
         this.map.getLayer('itinerary').setLayoutProperty('visibility', 'visible');
         this.map.getLayer('city-outline').setLayoutProperty('visibility', 'visible'); // XXX should be after setData but won't work there
-        CityService.getCityOutline(feature.properties.cityInseeCode).then((cityOutline) => {
+        CityService.getCityOutline(station.cityInseeCode).then((cityOutline) => {
             if (cityOutline) {
                 this.map.getSource('city-outline').setData(cityOutline);
             } else {
@@ -180,4 +195,4 @@ class Map extends Component {
     }
 }
 
-export default Map;
+export default withRouter(Map);

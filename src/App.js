@@ -3,6 +3,7 @@ import Map from './components/Map.js'
 import SidePanel from './components/SidePanel.js'
 import StationService from './services/StationService.js';
 import React, { Component } from 'react';
+import { BrowserRouter, Route } from "react-router-dom";
 import 'fontsource-roboto';
 
 class App extends Component {
@@ -10,19 +11,13 @@ class App extends Component {
     super(props);
     this.stationService = new StationService();
     this.state = {
-      station: null,
       stations: this.stationService.getStations(),
       search: {
         minTravelTime: null,
         maxTravelTime: null,
       }
     };
-    this.handleStationChange = this.handleStationChange.bind(this);
     this.handleSearchChange = this.handleSearchChange.bind(this);
-  }
-
-  handleStationChange(newStation) {
-    this.setState({station: newStation});
   }
 
   handleSearchChange(search) {
@@ -36,17 +31,18 @@ class App extends Component {
   render() {
     return (
       <div>
-        <SidePanel
-          station={this.state.station}
-          onSearchChange={this.handleSearchChange}
-        />
-        <Map
-          stations={this.state.stations}
-          station={this.state.station}
-          onStationClick={this.handleStationChange}
-          minTravelTime={this.state.search.minTravelTime}
-          maxTravelTime={this.state.search.maxTravelTime}
-        />
+        <BrowserRouter>
+          <Route path="/:origin?/:destination?">
+            <SidePanel
+              onSearchChange={this.handleSearchChange}
+            />
+            <Map
+              stations={this.state.stations}
+              minTravelTime={this.state.search.minTravelTime}
+              maxTravelTime={this.state.search.maxTravelTime}
+            />
+          </Route>
+        </BrowserRouter>
       </div>
     );
   }

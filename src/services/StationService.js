@@ -29,6 +29,25 @@ class StationService {
     return result;
   }
 
+  getStationById(stationId) {
+    let stations = this.getStations();
+    let result = stations.find(station => station.stationId === stationId);
+    return result;
+  }
+
+  getStationBySlug(stationSlug) {
+    let stations = this.getStations();
+    let result = stations.find(station => station.stationName.replace(' ', '-').toLowerCase() === stationSlug);
+    return result;
+  }
+
+  getSlugFromId(stationId) {
+    let stations = this.getStations();
+    let station = stations.find(station => station.stationId === stationId);
+    let result = station.stationName.replace(' ', '-').toLowerCase();
+    return result;
+  }
+
   getStations() {
     return [
         {
