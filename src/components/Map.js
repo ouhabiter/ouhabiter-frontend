@@ -1,6 +1,9 @@
+import { Box, Grid, Paper, Tooltip } from '@material-ui/core';
+import TimerIcon from '@material-ui/icons/Timer';
 import React, { Component } from 'react';
 import MapboxMap from 'react-mapbox-wrapper';
 import MapHelper from '../helpers/MapHelper';
+import TimeHelper from '../helpers/TimeHelper';
 import CityService from '../services/CityService';
 
 class Map extends Component {
@@ -8,6 +11,9 @@ class Map extends Component {
         super(props);
         this.onMapLoad = this.onMapLoad.bind(this);
         this.handleStationClick = this.handleStationClick.bind(this);
+        this.state = {
+            colorScale: null
+        }
     }
 
     componentDidUpdate(prevProps) {
@@ -37,7 +43,7 @@ class Map extends Component {
                     'base': 3,
                     'stops': [
                         [8, 4],
-                        [10, 10],
+                        [8, 8],
                         [22, 180]
                     ]
                 },
@@ -100,22 +106,16 @@ class Map extends Component {
     }
 
     updateColorScale() {
-        let start = this.props.minTravelTime ? this.props.minTravelTime : 0;
-        let step = this.props.maxTravelTime ? (this.props.maxTravelTime - start) / 5 : 1.5;
+        let colorScale = MapHelper.getColorScale(this.props.minTravelTime, this.props.maxTravelTime);
         let paintProperty = [
             'step',
             ['get', 'travelTime'],
-            '#10a908',
-            start + step,
-            '#ddd700',
-            start + step * 3,
-            '#FEA234',
-            start + step * 5,
-            '#e93c09',
-            start + step * 7,
-            '#f9093a'
-        ]
+            ...colorScale
+        ];
         this.map.setPaintProperty('stations', 'circle-color', paintProperty);
+        this.setState({
+            colorScale: colorScale,
+        });
     }
 
     handleStationClick(event) {
@@ -137,7 +137,7 @@ class Map extends Component {
 
     render() {
         return (
-            <div style={{ height: "100vh", width: "100%"}}>
+            <div style={{ height: "100vh", width: "100%" }}>
                 <MapboxMap
                     accessToken="pk.eyJ1IjoibWVpbGxldXJzYWdlbnRzIiwiYSI6ImNqMWV5YnRpMDAwMHkyeXRnd3JkdXRiaDEifQ.emcFsn3Ox6WcKmOHhbTOPQ"
                     zoom="5"
@@ -147,6 +147,30 @@ class Map extends Component {
                     onClick={this.handleStationClick}
                 >
                 </MapboxMap>
+                { this.state.colorScale &&
+                    <Box component={Paper} style={{ position: "absolute", zIndex: 2, top: 24, left: "30%", backgroundColor: "white", display: "flex" }}>
+                        <Box style={{ display: "flex", alignItems: "center", paddingLeft: 8, margin: 8 }}>
+                            <TimerIcon />
+                            <div style={{ marginLeft: 8, marginRight: 8 }}>{"- de " + TimeHelper.hoursToTimeString(this.state.colorScale[1])}</div>
+                            <Tooltip title={"moins de " + TimeHelper.hoursToTimeString(this.state.colorScale[1])}>
+                                <div style={{ "background-color": this.state.colorScale[0], height: 8, width: 24 }}></div>
+                            </Tooltip>
+                            <Tooltip title={"de " + TimeHelper.hoursToTimeString(this.state.colorScale[1]) + " à " + TimeHelper.hoursToTimeString(this.state.colorScale[3])}>
+                            <div style={{ "background-color": this.state.colorScale[2], height: 8, width: 24 }}></div>
+                            </Tooltip>
+                            <Tooltip title={"de " + TimeHelper.hoursToTimeString(this.state.colorScale[3]) + " à " + TimeHelper.hoursToTimeString(this.state.colorScale[5])}>
+                            <div style={{ "background-color": this.state.colorScale[4], height: 8, width: 24 }}></div>
+                            </Tooltip>
+                            <Tooltip title={"de " + TimeHelper.hoursToTimeString(this.state.colorScale[5]) + " à " + TimeHelper.hoursToTimeString(this.state.colorScale[7])}>
+                            <div style={{ "background-color": this.state.colorScale[6], height: 8, width: 24 }}></div>
+                            </Tooltip>
+                            <Tooltip title={"plus de " + TimeHelper.hoursToTimeString(this.state.colorScale[7])}>
+                            <div style={{ "background-color": this.state.colorScale[8], height: 8, width: 24 }}></div>
+                            </Tooltip>
+                            <div style={{ marginLeft: 8 }}>{"+ de " + TimeHelper.hoursToTimeString(this.state.colorScale[7])}</div>
+                        </Box>
+                    </Box>
+                }
             </div>
         )
     }

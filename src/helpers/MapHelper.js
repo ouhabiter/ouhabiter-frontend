@@ -22,6 +22,23 @@ class MapHelper {
             }
         }
     }
+
+    static getColorScale(min, max) {
+        let start = min ? min : 0;
+        let step = max ? (max - start) / 7 : 1.5;
+        let colorScale = [
+            '#0A5502',
+            start + step,
+            '#13be00',
+            start + step * 3,
+            '#dfff00',
+            start + step * 5,
+            '#ffa51f',
+            start + step * 7,
+            '#c80000'
+        ]
+        return colorScale;
+    }
 }
 
 export default MapHelper;
