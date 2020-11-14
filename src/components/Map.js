@@ -11,7 +11,7 @@ class Map extends Component {
     constructor(props) {
         super(props);
         this.onMapLoad = this.onMapLoad.bind(this);
-        this.handleStationClick = this.handleStationClick.bind(this);
+        this.handleMapClick = this.handleMapClick.bind(this);
         this.state = {
             colorScale: null
         }
@@ -119,19 +119,24 @@ class Map extends Component {
         });
     }
 
-    handleStationClick(event) {
+    handleMapClick(event) {
         let features = this.map.queryRenderedFeatures(event.point, {layers: ['stations']});
         if (features.length === 0) {
+            this.map.getLayer('itinerary').setLayoutProperty('visibility', 'none');
+            this.map.getLayer('city-outline').setLayoutProperty('visibility', 'none');
+            this.props.onStationClick(null);
             return;
         }
         let feature = features[0];
         this.props.onStationClick(feature.properties);
         this.map.getSource('itinerary').setData(JSON.parse(feature.properties.itinerary));
+        this.map.getLayer('itinerary').setLayoutProperty('visibility', 'visible');
+        this.map.getLayer('city-outline').setLayoutProperty('visibility', 'visible'); // XXX should be after setData but won't work there
         CityService.getCityOutline(feature.properties.cityInseeCode).then((cityOutline) => {
             if (cityOutline) {
                 this.map.getSource('city-outline').setData(cityOutline);
             } else {
-                this.map.getSource('city-outline').setData({'type': 'Polygon', 'coordinates': []});
+                this.map.getLayer('city-outline').setLayoutProperty('visibility', 'none');
             }
         });
     }
@@ -145,7 +150,7 @@ class Map extends Component {
                     mapboxStyle="mapbox://styles/meilleursagents/ckhf5i46501mv1apg8er3v1b1"
                     coordinates={{ lat: 46.227638, lng: -0.8930568 }}
                     onLoad={this.onMapLoad}
-                    onClick={this.handleStationClick}
+                    onClick={this.handleMapClick}
                 >
                 </MapboxMap>
                 { this.state.colorScale &&
