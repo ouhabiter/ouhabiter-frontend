@@ -19,7 +19,7 @@ class SidePanel extends Component {
     componentDidUpdate(prevProps) {
         // TODO better way to do this?
         if (
-            !prevProps ||
+            !prevProps.station ||
             (
                 this.props != prevProps &&
                 this.props.station &&
@@ -41,7 +41,7 @@ class SidePanel extends Component {
 
     render() {
         return (
-            <Box p={1} className="SidePanel">
+            <Box pl={1} className="SidePanel">
                 <Collapse in={this.state.searchActive}>
                     <Search onSearchChange={this.props.onSearchChange}></Search>
                 </Collapse>

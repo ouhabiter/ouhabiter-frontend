@@ -25,7 +25,7 @@ class MapHelper {
 
     static getColorScale(min, max) {
         let start = min ? min : 0;
-        let step = max ? (max - start) / 7 : 1.5;
+        let step = max ? (max - start) / 8 : 1.5;
         let colorScale = [
             '#0A5502',
             start + step,

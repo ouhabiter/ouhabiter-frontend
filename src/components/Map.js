@@ -142,14 +142,14 @@ class Map extends Component {
                     accessToken="pk.eyJ1IjoibWVpbGxldXJzYWdlbnRzIiwiYSI6ImNqMWV5YnRpMDAwMHkyeXRnd3JkdXRiaDEifQ.emcFsn3Ox6WcKmOHhbTOPQ"
                     zoom="5"
                     mapboxStyle="mapbox://styles/meilleursagents/ckhf5i46501mv1apg8er3v1b1"
-                    coordinates={{ lat: 46.227638, lng: 2.213749 }}
+                    coordinates={{ lat: 46.227638, lng: -0.8930568 }}
                     onLoad={this.onMapLoad}
                     onClick={this.handleStationClick}
                 >
                 </MapboxMap>
                 { this.state.colorScale &&
                     <Box component={Paper} style={{ position: "absolute", zIndex: 2, top: 24, left: "30%", backgroundColor: "white", display: "flex" }}>
-                        <Box style={{ display: "flex", alignItems: "center", paddingLeft: 8, margin: 8 }}>
+                        <Box style={{ display: "flex", alignItems: "center", margin: 8 }}>
                             <TimerIcon />
                             <div style={{ marginLeft: 8, marginRight: 8 }}>{"- de " + TimeHelper.hoursToTimeString(this.state.colorScale[1])}</div>
                             <Tooltip title={"moins de " + TimeHelper.hoursToTimeString(this.state.colorScale[1])}>
