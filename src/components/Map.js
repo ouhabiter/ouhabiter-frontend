@@ -1,10 +1,11 @@
-import { Box, Grid, Paper, Tooltip } from '@material-ui/core';
+import { Box, Paper, Tooltip } from '@material-ui/core';
 import TimerIcon from '@material-ui/icons/Timer';
 import React, { Component } from 'react';
 import MapboxMap from 'react-mapbox-wrapper';
 import MapHelper from '../helpers/MapHelper';
 import TimeHelper from '../helpers/TimeHelper';
 import CityService from '../services/CityService';
+import './Map.css';
 
 class Map extends Component {
     constructor(props) {
@@ -148,27 +149,25 @@ class Map extends Component {
                 >
                 </MapboxMap>
                 { this.state.colorScale &&
-                    <Box component={Paper} style={{ position: "absolute", zIndex: 2, top: 24, left: "30%", backgroundColor: "white", display: "flex" }}>
-                        <Box style={{ display: "flex", alignItems: "center", margin: 8 }}>
-                            <TimerIcon />
-                            <div style={{ marginLeft: 8, marginRight: 8 }}>{"- de " + TimeHelper.hoursToTimeString(this.state.colorScale[1])}</div>
-                            <Tooltip title={"moins de " + TimeHelper.hoursToTimeString(this.state.colorScale[1])}>
-                                <div style={{ "background-color": this.state.colorScale[0], height: 8, width: 24 }}></div>
-                            </Tooltip>
-                            <Tooltip title={"de " + TimeHelper.hoursToTimeString(this.state.colorScale[1]) + " à " + TimeHelper.hoursToTimeString(this.state.colorScale[3])}>
-                            <div style={{ "background-color": this.state.colorScale[2], height: 8, width: 24 }}></div>
-                            </Tooltip>
-                            <Tooltip title={"de " + TimeHelper.hoursToTimeString(this.state.colorScale[3]) + " à " + TimeHelper.hoursToTimeString(this.state.colorScale[5])}>
-                            <div style={{ "background-color": this.state.colorScale[4], height: 8, width: 24 }}></div>
-                            </Tooltip>
-                            <Tooltip title={"de " + TimeHelper.hoursToTimeString(this.state.colorScale[5]) + " à " + TimeHelper.hoursToTimeString(this.state.colorScale[7])}>
-                            <div style={{ "background-color": this.state.colorScale[6], height: 8, width: 24 }}></div>
-                            </Tooltip>
-                            <Tooltip title={"plus de " + TimeHelper.hoursToTimeString(this.state.colorScale[7])}>
-                            <div style={{ "background-color": this.state.colorScale[8], height: 8, width: 24 }}></div>
-                            </Tooltip>
-                            <div style={{ marginLeft: 8 }}>{"+ de " + TimeHelper.hoursToTimeString(this.state.colorScale[7])}</div>
-                        </Box>
+                    <Box component={Paper} className="ColorScaleContainer">
+                        <TimerIcon />
+                        <div className="ColorScaleStart">{"- de " + TimeHelper.hoursToTimeString(this.state.colorScale[1])}</div>
+                        <Tooltip title={"moins de " + TimeHelper.hoursToTimeString(this.state.colorScale[1])}>
+                            <div className="ColorScaleColor" style={{ "background-color": this.state.colorScale[0] }}></div>
+                        </Tooltip>
+                        <Tooltip title={"de " + TimeHelper.hoursToTimeString(this.state.colorScale[1]) + " à " + TimeHelper.hoursToTimeString(this.state.colorScale[3])}>
+                            <div className="ColorScaleColor" style={{ "background-color": this.state.colorScale[2] }}></div>
+                        </Tooltip>
+                        <Tooltip title={"de " + TimeHelper.hoursToTimeString(this.state.colorScale[3]) + " à " + TimeHelper.hoursToTimeString(this.state.colorScale[5])}>
+                            <div className="ColorScaleColor" style={{ "background-color": this.state.colorScale[4] }}></div>
+                        </Tooltip>
+                        <Tooltip title={"de " + TimeHelper.hoursToTimeString(this.state.colorScale[5]) + " à " + TimeHelper.hoursToTimeString(this.state.colorScale[7])}>
+                            <div className="ColorScaleColor" style={{ "background-color": this.state.colorScale[6] }}></div>
+                        </Tooltip>
+                        <Tooltip title={"plus de " + TimeHelper.hoursToTimeString(this.state.colorScale[7])}>
+                            <div className="ColorScaleColor" style={{ "background-color": this.state.colorScale[8] }}></div>
+                        </Tooltip>
+                        <div className="ColorScaleEnd">{"+ de " + TimeHelper.hoursToTimeString(this.state.colorScale[7])}</div>
                     </Box>
                 }
             </div>

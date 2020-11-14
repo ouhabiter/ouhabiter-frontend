@@ -19,12 +19,15 @@ class SidePanel extends Component {
     componentDidUpdate(prevProps) {
         // TODO better way to do this?
         if (
-            !prevProps.station ||
             (
-                this.props != prevProps &&
+                !prevProps.station &&
+                this.props.station
+            ) ||
+            (
+                this.props !== prevProps &&
                 this.props.station &&
                 prevProps.station &&
-                prevProps.station.id != this.props.station.id
+                prevProps.station.id !== this.props.station.id
             )
         ) {
             this.setState({

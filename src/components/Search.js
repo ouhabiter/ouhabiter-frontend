@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Formik, Form, Field, useFormikContext } from 'formik';
-import { Button, Typography } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import { TextField, CheckboxWithLabel } from 'formik-material-ui';
 
 const AutoSave = () => {

@@ -1,0 +1,24 @@
+.ColorScaleContainer {
+    position: absolute;
+    z-index: 2;
+    top: 24px;
+    left: 30%;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    padding: 8px;
+}
+
+.ColorScaleColor {
+    height: 8px;
+    width: 24px;
+}
+
+.ColorScaleStart {
+    margin-left: 8px;
+    margin-right: 8px;
+}
+
+.ColorScaleEnd {
+    margin-left: 8px;
+}
