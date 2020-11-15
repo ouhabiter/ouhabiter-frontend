@@ -114,7 +114,7 @@ class Map extends Component {
     }
 
     updateColorScale() {
-        let colorScale = MapHelper.getColorScale(this.props.minTravelTime, this.props.maxTravelTime);
+        let colorScale = MapHelper.buildColorScale(this.props.minTravelTime, this.props.maxTravelTime);
         let paintProperty = [
             'step',
             ['get', 'travelTime'],
