@@ -10,6 +10,7 @@ const AutoSave = () => {
         if (formik.values !== formik.initialValues) {
             formik.submitForm();
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [formik.values]);
     return null;
 }
@@ -65,7 +66,7 @@ class Search extends Component {
                             disabled={false}
                             style={{ width: "95%"}}
                         /><br/>
-                        <div style={{ display: "flex", "margin-top": 10 }}>
+                        <div style={{ display: "flex", marginTop: 10 }}>
                             <div>
                                 <Field
                                     component={CheckboxWithLabel}
@@ -146,7 +147,7 @@ class Search extends Component {
                             color="primary"
                             type="submit"
                             disabled={false}
-                            style={{ "margin-top": 10 }}
+                            style={{ marginTop: 10 }}
                         >Filtrer</Button>
                     </Form>
                 )}
