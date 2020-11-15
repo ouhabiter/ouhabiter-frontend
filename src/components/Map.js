@@ -128,19 +128,19 @@ class Map extends Component {
 
     handleMapClick(event) {
         let features = this.map.queryRenderedFeatures(event.point, {layers: ['stations']});
-        if (features.length === 0) {
-            this.map.getLayer('itinerary').setLayoutProperty('visibility', 'none');
-            this.map.getLayer('city-outline').setLayoutProperty('visibility', 'none');
-            this.props.history.push('')
-            return;
+        let stationSlug = null;
+        if (features.length > 0) {
+            stationSlug = this.stationService.getSlugFromId(features[0].properties.id);
         }
-        let stationSlug = this.stationService.getSlugFromId(features[0].properties.id);
         this.setStation(stationSlug);
     }
 
     setStation(stationSlug) {
         let station = this.stationService.getStationBySlug(stationSlug);
         if (!station) {
+            this.map.getLayer('itinerary').setLayoutProperty('visibility', 'none');
+            this.map.getLayer('city-outline').setLayoutProperty('visibility', 'none');
+            this.props.history.push('')
             return;
         }
         this.props.history.push(`/paris/${stationSlug}`)

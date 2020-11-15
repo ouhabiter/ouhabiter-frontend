@@ -29,7 +29,12 @@ class SidePanel extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (
+        if (prevProps.match.params.destination && !this.props.match.params.destination) { // no destination anymore
+            this.setState({
+                searchActive: true,
+                station: null,
+            });
+        } else if (
             (!prevProps.match.params.destination && this.props.match.params.destination) || // first destination
             (prevProps.match.params.destination !== this.props.match.params.destination) // new destination
         ) {
@@ -38,15 +43,11 @@ class SidePanel extends Component {
                 searchActive: false,
                 station: station
             });
-        } else if (prevProps.match.params.destination && !this.props.match.params.destination) { // no destination anymore
-            this.setState({
-                searchActive: true,
-                station: null,
-            });
         }
     }
 
     handleCloseStation() {
+        this.props.history.push('');
         this.setState({
             searchActive: true
         });

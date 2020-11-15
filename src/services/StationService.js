@@ -30,20 +30,32 @@ class StationService {
   }
 
   getStationById(stationId) {
+    if (!stationId) {
+      return null;
+    }
     let stations = this.getStations();
     let result = stations.find(station => station.stationId === stationId);
     return result;
   }
 
   getStationBySlug(stationSlug) {
+    if (!stationSlug) {
+      return null;
+    }
     let stations = this.getStations();
     let result = stations.find(station => station.stationName.replace(' ', '-').toLowerCase() === stationSlug);
     return result;
   }
 
   getSlugFromId(stationId) {
+    if (!stationId) {
+      return null;
+    }
     let stations = this.getStations();
     let station = stations.find(station => station.stationId === stationId);
+    if (!station) {
+      return null;
+    }
     let result = station.stationName.replace(' ', '-').toLowerCase();
     return result;
   }
