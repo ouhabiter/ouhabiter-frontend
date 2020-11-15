@@ -144,14 +144,20 @@ class Map extends Component {
             return;
         }
         this.props.history.push(`/paris/${stationSlug}`)
-        this.map.getSource('itinerary').setData(station.itinerary);
-        this.map.getLayer('itinerary').setLayoutProperty('visibility', 'visible');
         this.map.getLayer('city-outline').setLayoutProperty('visibility', 'visible'); // XXX should be after setData but won't work there
         CityService.getCityOutline(station.cityInseeCode).then((cityOutline) => {
             if (cityOutline) {
                 this.map.getSource('city-outline').setData(cityOutline);
             } else {
                 this.map.getLayer('city-outline').setLayoutProperty('visibility', 'none');
+            }
+        });
+        this.map.getLayer('itinerary').setLayoutProperty('visibility', 'visible');
+        this.stationService.getItinerary('admin:fr:75056', station.stationId).then((itinerary) => {
+            if (itinerary) {
+                this.map.getSource('itinerary').setData(itinerary);
+            } else {
+                this.map.getLayer('itinerary').setLayoutProperty('visibility', 'none');
             }
         });
     }
