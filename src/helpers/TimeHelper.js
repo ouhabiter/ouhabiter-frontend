@@ -1,5 +1,5 @@
 class TimeHelper {
-    static hoursToTimeString(hours) {
+    static hoursToTimeString(hours, withMinutes=true) {
         var rhours = Math.floor(hours);
         var minutes = (hours - rhours) * 60;
         var rminutes = Math.round(minutes);
@@ -9,7 +9,10 @@ class TimeHelper {
         if (rminutes < 10) {
             rminutes = "0" + rminutes;
         }
-        return rhours + "h" + rminutes;
+        if (withMinutes) {
+            return rhours + "h" + rminutes;
+        }
+        return rhours + "h";
     }
 }
 

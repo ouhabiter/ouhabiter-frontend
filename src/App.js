@@ -13,8 +13,8 @@ class App extends Component {
     this.state = {
       stations: this.stationService.getStations(),
       search: {
-        minTravelTime: null,
-        maxTravelTime: null,
+        minTravelTime: 0,
+        maxTravelTime: 20,
       }
     };
     this.handleSearchChange = this.handleSearchChange.bind(this);

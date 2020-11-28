@@ -2,6 +2,17 @@ import React, { Component } from 'react';
 import { Formik, Form, Field, useFormikContext } from 'formik';
 import { Button } from '@material-ui/core';
 import { TextField, CheckboxWithLabel } from 'formik-material-ui';
+import Typography from '@material-ui/core/Typography';
+import Slider from '@material-ui/core/Slider';
+import Box from '@material-ui/core/Box';
+import {
+    populationMarks,
+    travelTimeMarks,
+    populationSliderScale,
+    travelTimeSliderScale,
+    populationSliderText,
+    travelTimeSliderText,
+} from '../helpers/SliderHelper';
 
 const AutoSave = () => {
     const formik = useFormikContext();
@@ -16,6 +27,30 @@ const AutoSave = () => {
 }
 
 class Search extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            minTravelTime: 0,
+            maxTravelTime: 20,
+            travelTimeRange: [0, 20],
+            minPopulation: 0,
+            maxPopulation: 200,
+            populationRange: [0, 200],
+        }
+    }
+
+    onSliderChange(event, value, setFieldValue, field) {
+        if (field === "travelTime") {
+            setFieldValue("minTravelTime", travelTimeSliderScale(value[0]));
+            setFieldValue("maxTravelTime", travelTimeSliderScale(value[1]));
+            this.setState({travelTimeRange: value});
+        } else {
+            setFieldValue("minPopulation", populationSliderScale(value[0]));
+            setFieldValue("maxPopulation", populationSliderScale(value[1]));
+            this.setState({populationRange: value});
+        }
+    }
+
     doSearch(values) {
         this.props.onSearchChange(values);
     }
@@ -24,48 +59,45 @@ class Search extends Component {
         return (
             <div>
                 <Formik
-                    initialValues={{ travelTime: '', population: '' }}
+                    initialValues={{ travelTime: this.state.travelTimeRange, population: this.state.populationRange }}
                     onSubmit={(values) => {
                         this.doSearch(values);
                     }}
                 >
                 {({
-                    handleSubmit
+                    handleSubmit,
+                    setFieldValue
                 }) => (
                     <Form onSubmit={handleSubmit} onChange={this.handleFormChange}>
                         <AutoSave/>
-                        <Field
-                            component={TextField}
-                            type="number"
-                            name="minTravelTime"
-                            label="Temps de trajet minimal"
-                            disabled={false}
-                            style={{ width: "95%"}}
-                        /><br/>
-                        <Field
-                            component={TextField}
-                            type="number"
-                            name="maxTravelTime"
-                            label="Temps de trajet maximal"
-                            disabled={false}
-                            style={{ width: "95%"}}
-                        /><br/>
-                        <Field
-                            component={TextField}
-                            type="number"
-                            name="minPopulation"
-                            label="Population minimale"
-                            disabled={false}
-                            style={{ width: "95%"}}
-                        /><br/>
-                        <Field
-                            component={TextField}
-                            type="number"
-                            name="maxPopulation"
-                            label="Population maximale"
-                            disabled={false}
-                            style={{ width: "95%"}}
-                        /><br/>
+                        <Typography id="travel-time" gutterBottom>Temps de trajet (depuis Paris)</Typography>
+                        <Box m={2}>
+                            <Slider
+                                value={this.state.travelTimeRange}
+                                onChange={(event, value) => this.onSliderChange(event, value, setFieldValue, "travelTime")}
+                                valueLabelDisplay="auto"
+                                valueLabelFormat={travelTimeSliderText}
+                                min={this.state.minTravelTime}
+                                max={this.state.maxTravelTime}
+                                scale={(x) => travelTimeSliderScale(x)}
+                                marks={travelTimeMarks}
+                                style={{ width: "95%"}}
+                            />
+                        </Box>
+                        <Typography id="population" gutterBottom>Population</Typography>
+                        <Box m={2}>
+                            <Slider
+                                value={this.state.populationRange}
+                                onChange={(event, value) => this.onSliderChange(event, value, setFieldValue, "population")}
+                                valueLabelDisplay="auto"
+                                valueLabelFormat={populationSliderText}
+                                min={this.state.minPopulation}
+                                max={this.state.maxPopulation}
+                                scale={(x) => populationSliderScale(x)}
+                                marks={populationMarks}
+                                style={{ width: "95%"}}
+                            />
+                        </Box>
                         <div style={{ display: "flex", marginTop: 10 }}>
                             <div>
                                 <Field
