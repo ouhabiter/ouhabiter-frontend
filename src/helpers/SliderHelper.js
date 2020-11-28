@@ -8,7 +8,7 @@ export const populationMarks = [
     {value: 100, scaledValue: 25000, label: "25k"},
     {value: 125, scaledValue: 50000, label: "50k"},
     {value: 150, scaledValue: 100000, label: "100k"},
-    {value: 175, scaledValue: 500000, label: "500k"},
+    {value: 175, scaledValue: 200000, label: "200k"},
     {value: 200, scaledValue: 1000000, label: "1M"}
 ];
 

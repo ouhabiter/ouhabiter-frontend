@@ -11,8 +11,9 @@ class App extends Component {
     super(props);
     this.stationService = new StationService();
     this.state = {
-      stations: this.stationService.getStations(),
+      stations: this.stationService.stations,
       search: {
+        // follows slider helper scale
         minTravelTime: 0,
         maxTravelTime: 20,
       }

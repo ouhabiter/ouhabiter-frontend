@@ -13,6 +13,7 @@ import {
     populationSliderText,
     travelTimeSliderText,
 } from '../helpers/SliderHelper';
+import debounce from 'debounce';
 
 const AutoSave = () => {
     const formik = useFormikContext();
@@ -60,9 +61,9 @@ class Search extends Component {
             <div>
                 <Formik
                     initialValues={{ travelTime: this.state.travelTimeRange, population: this.state.populationRange }}
-                    onSubmit={(values) => {
+                    onSubmit={debounce((values) => {
                         this.doSearch(values);
-                    }}
+                    }, 200)}
                 >
                 {({
                     handleSubmit,
