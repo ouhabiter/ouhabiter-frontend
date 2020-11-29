@@ -12,8 +12,18 @@ class StationService {
 
   async updateStations(inseeCode) {
     // save all stations to avoid calls
-    // this.formerStations[this.inseeCode] = this.stations;
-    // this.inseeCode = inseeCode;
+    if (inseeCode === this.inseeCode) {
+      var promise = new Promise((resolve) => {resolve()});
+      return promise;
+    }
+    if (inseeCode in this.formerStations) {
+      this.stations = this.formerStations[inseeCode];
+      this.inseeCode = inseeCode;
+      var promise = new Promise((resolve) => {resolve()});
+      return promise;
+    }
+    this.formerStations[this.inseeCode] = this.stations;
+    this.inseeCode = inseeCode;
     let hits = [];
     return this.index.browseObjects({
       query: '', // Empty query will match all records
@@ -24,33 +34,35 @@ class StationService {
     }).then(() => this.stations = hits);
   }
 
-  search(search) {
-    let result = []
-    this.stations.forEach(station => {
-      if (
-        search &&
-        (
-          (search.minPopulation && search.minPopulation > station.cityPopulation) ||
-          (search.maxPopulation && search.maxPopulation < station.cityPopulation) ||
-          (search.minTravelTime && search.minTravelTime > station.travelTime) ||
-          (search.maxTravelTime && search.maxTravelTime < station.travelTime) ||
-          (search.hasFiber && !station.hasFiber) ||
-          (search.noFiber && station.hasFiber) ||
-          (search.hasMountains && !station.hasMountains) ||
-          (search.noMountains && station.hasMountains) ||
-          (search.hasLake && !station.hasLake) ||
-          (search.hasCoastline && !station.hasCoastline) ||
-          (search.noCoastline && station.hasCoastline) ||
-          (search.hasCountryside && !station.hasCountryside) ||
-          (search.noCountryside && station.hasCountryside) ||
-          (search.hasPark && !station.hasPark)
-        )
-      ) {
-        return;
-      }
-      result.push(station)
-    })
-    return result;
+  async search(search) {
+    return this.updateStations(search.fromCityInseeCode).then(() => {
+      let result = []
+      this.stations.forEach(station => {
+        if (
+          search &&
+          (
+            (search.minPopulation && search.minPopulation > station.cityPopulation) ||
+            (search.maxPopulation && search.maxPopulation < station.cityPopulation) ||
+            (search.minTravelTime && search.minTravelTime > station.travelTime) ||
+            (search.maxTravelTime && search.maxTravelTime < station.travelTime) ||
+            (search.hasFiber && !station.hasFiber) ||
+            (search.noFiber && station.hasFiber) ||
+            (search.hasMountains && !station.hasMountains) ||
+            (search.noMountains && station.hasMountains) ||
+            (search.hasLake && !station.hasLake) ||
+            (search.hasCoastline && !station.hasCoastline) ||
+            (search.noCoastline && station.hasCoastline) ||
+            (search.hasCountryside && !station.hasCountryside) ||
+            (search.noCountryside && station.hasCountryside) ||
+            (search.hasPark && !station.hasPark)
+          )
+        ) {
+          return;
+        }
+        result.push(station)
+      })
+      return result;
+    });
   }
 
   getStationById(stationId) {

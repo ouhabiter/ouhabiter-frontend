@@ -10,26 +10,32 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      stations: stationService.stations,
+      stations: [],
       search: {
         // follows slider helper scale
         minTravelTime: 0,
         maxTravelTime: 20,
+        fromCityInseeCode: process.env.REACT_APP_PARIS_INSEE_CODE,
       }
     };
-    stationService.updateStations(process.env.REACT_APP_PARIS_INSEE_CODE).then(() => {
-      this.setState({stations: stationService.stations});
+  }
+
+  componentDidMount() {
+    stationService.search(this.state.search).then((stations) => {
+      this.setState({stations: stations});
     });
     this.handleSearchChange = this.handleSearchChange.bind(this);
   }
 
   handleSearchChange(search) {
-    stationService.updateStations(search.fromCityInseeCode).then(() => {
-      this.setState({
-        search: search,
-        stations: stationService.stations
+    if (search !== this.state.search) {
+      stationService.search(search).then((stations) => {
+        this.setState({
+          search: search,
+          stations: stations
+        });
       });
-    });
+    }
   }
 
   render() {

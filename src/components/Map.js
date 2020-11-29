@@ -21,12 +21,10 @@ class Map extends Component {
 
     componentDidUpdate(prevProps) {
         if (prevProps !== this.props){
-            if (this.map) { // map hasn't loaded yet
-                this.updateStations();
-                this.updateColorScale();
-                if (this.props.match.params.destination !== prevProps.match.params.destination) {
-                    this.setStation(this.props.match.params.destination);
-                }
+            this.updateStations();
+            this.updateColorScale();
+            if (this.props.match.params.destination !== prevProps.match.params.destination) {
+                this.setStation(this.props.match.params.destination);
             }
         }
     }
@@ -108,24 +106,27 @@ class Map extends Component {
         this.props.stations.forEach(station => {
             features.push(MapHelper.stationToFeature(station))
         });
-        this.map.getSource('stations').setData({
-            'type': 'FeatureCollection',
-            'features': features
-        })
+        if (this.map) {
+            this.map.getSource('stations').setData({
+                'type': 'FeatureCollection',
+                'features': features
+            });
+        }
     }
 
     updateColorScale() {
-        console.log(this.props.minTravelTime, this.props.maxTravelTime);
         let colorScale = MapHelper.buildColorScale(this.props.minTravelTime, this.props.maxTravelTime);
         let paintProperty = [
             'step',
             ['get', 'travelTime'],
             ...colorScale
         ];
-        this.map.setPaintProperty('stations', 'circle-color', paintProperty);
         this.setState({
             colorScale: colorScale,
         });
+        if (this.map) {
+            this.map.setPaintProperty('stations', 'circle-color', paintProperty);
+        }
     }
 
     handleMapClick(event) {

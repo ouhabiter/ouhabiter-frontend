@@ -14,12 +14,9 @@ import {
     travelTimeSliderText,
 } from '../helpers/SliderHelper';
 import debounce from 'debounce';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-
 
 const AutoSave = () => {
     const formik = useFormikContext();
@@ -67,10 +64,10 @@ class Search extends Component {
     }
 
     // XXX feels like I shouldn't need to use the component's state for this
-    onRadioChange(event, value, setFieldValue, field) {
+    onSelectChange(event, setFieldValue) {
         // use formik's setFieldValue to update form
-        setFieldValue(event.target.name, value);
-        this.setState({[event.target.name]: value}); // see computed property names
+        setFieldValue(event.target.name, event.target.value);
+        this.setState({[event.target.name]: event.target.value}); // see computed property names
     }
 
     doSearch(values) {
@@ -86,146 +83,147 @@ class Search extends Component {
                         population: this.state.populationRange,
                         minTravelTime: this.state.minTravelTime,
                         maxTravelTime: this.state.maxTravelTime,
+                        fromCityInseeCode: this.state.fromCityInseeCode,
                     }}
                     onSubmit={debounce((values) => {
                         this.doSearch(values);
-                    }, 200)}
+                    }, 100)}
                 >
-                {({
-                    handleSubmit,
-                    setFieldValue
-                }) => (
-                    <Form onSubmit={handleSubmit} onChange={this.handleFormChange}>
-                        <AutoSave/>
-                        <Typography id="from-city-insee-code" variant="h4" gutterBottom>Départ</Typography>
-                        <Box pb={2}>
-                            <RadioGroup
-                                aria-label="from"
-                                name="fromCityInseeCode"
-                                value={this.state.fromCityInseeCode}
-                                onChange={(event, value) => this.onRadioChange(event, value, setFieldValue)}
-                            >
-                                {AVAILABLE_CITIES.map((city) => {
-                                    return (
-                                        <FormControlLabel value={city.inseeCode} control={<Radio />} label={city.name} />
-                                    )
-                                })}
-                            </RadioGroup>
-                        </Box>
-                        <Typography id="from-city-insee-code" variant="h4" gutterBottom>Arrivée</Typography>
-                        <Typography id="travel-time" gutterBottom>Temps de trajet</Typography>
-                        <Box m={2}>
-                            <Slider
-                                value={this.state.travelTimeRange}
-                                onChange={(event, value) => this.onSliderChange(event, value, setFieldValue, "travelTime")}
-                                valueLabelDisplay="auto"
-                                valueLabelFormat={travelTimeSliderText}
-                                min={this.state.minTravelTime}
-                                max={this.state.maxTravelTime}
-                                scale={(x) => travelTimeSliderScale(x)}
-                                marks={travelTimeMarks}
-                                style={{ width: "95%"}}
-                            />
-                        </Box>
-                        <Typography id="population" gutterBottom>Population</Typography>
-                        <Box m={2}>
-                            <Slider
-                                value={this.state.populationRange}
-                                onChange={(event, value) => this.onSliderChange(event, value, setFieldValue, "population")}
-                                valueLabelDisplay="auto"
-                                valueLabelFormat={populationSliderText}
-                                min={this.state.minPopulation}
-                                max={this.state.maxPopulation}
-                                scale={(x) => populationSliderScale(x)}
-                                marks={populationMarks}
-                                style={{ width: "95%"}}
-                            />
-                        </Box>
-                        <div style={{ display: "flex", marginTop: 10 }}>
-                            <div>
-                                <Field
-                                    component={CheckboxWithLabel}
-                                    type="checkbox"
-                                    name="hasFiber"
-                                    Label={{ label: "Avec la fibre" }}
+                    {({
+                        handleSubmit,
+                        setFieldValue
+                    }) => (
+                            <Form onSubmit={handleSubmit} onChange={this.handleFormChange}>
+                                <AutoSave />
+                                <Box pb={2}>
+                                    <Typography id="travel-time" gutterBottom>Départ</Typography>
+                                    <FormControl variant="outlined" style={{ width: "95%" }}>
+                                        <Select
+                                            name="fromCityInseeCode"
+                                            value={this.state.fromCityInseeCode}
+                                            onChange={(event) => this.onSelectChange(event, setFieldValue)}
+                                        >
+                                            {AVAILABLE_CITIES.map((city) => {
+                                                return (
+                                                    <MenuItem value={city.inseeCode}>{city.name}</MenuItem>
+                                                )
+                                            })}
+                                        </Select>
+                                    </FormControl>
+                                </Box>
+                                <Typography id="travel-time" gutterBottom>Temps de trajet</Typography>
+                                <Box m={2}>
+                                    <Slider
+                                        value={this.state.travelTimeRange}
+                                        onChange={(event, value) => this.onSliderChange(event, value, setFieldValue, "travelTime")}
+                                        valueLabelDisplay="auto"
+                                        valueLabelFormat={travelTimeSliderText}
+                                        min={this.state.minTravelTime}
+                                        max={this.state.maxTravelTime}
+                                        scale={(x) => travelTimeSliderScale(x)}
+                                        marks={travelTimeMarks}
+                                        style={{ width: "95%" }}
+                                    />
+                                </Box>
+                                <Typography id="population" gutterBottom>Population</Typography>
+                                <Box m={2}>
+                                    <Slider
+                                        value={this.state.populationRange}
+                                        onChange={(event, value) => this.onSliderChange(event, value, setFieldValue, "population")}
+                                        valueLabelDisplay="auto"
+                                        valueLabelFormat={populationSliderText}
+                                        min={this.state.minPopulation}
+                                        max={this.state.maxPopulation}
+                                        scale={(x) => populationSliderScale(x)}
+                                        marks={populationMarks}
+                                        style={{ width: "95%" }}
+                                    />
+                                </Box>
+                                <div style={{ display: "flex", marginTop: 10 }}>
+                                    <div>
+                                        <Field
+                                            component={CheckboxWithLabel}
+                                            type="checkbox"
+                                            name="hasFiber"
+                                            Label={{ label: "Avec la fibre" }}
+                                            disabled={false}
+                                        /><br />
+                                        <Field
+                                            component={CheckboxWithLabel}
+                                            type="checkbox"
+                                            name="hasCountryside"
+                                            Label={{ label: "À la campagne" }}
+                                            disabled={false}
+                                        /><br />
+                                        <Field
+                                            component={CheckboxWithLabel}
+                                            type="checkbox"
+                                            name="hasMountains"
+                                            Label={{ label: "À la montagne" }}
+                                            disabled={false}
+                                        /><br />
+                                        <Field
+                                            component={CheckboxWithLabel}
+                                            type="checkbox"
+                                            name="hasCoastline"
+                                            Label={{ label: "À la mer" }}
+                                            disabled={false}
+                                        /><br />
+                                        <Field
+                                            component={CheckboxWithLabel}
+                                            type="checkbox"
+                                            name="hasLake"
+                                            disabled={false}
+                                            Label={{ label: "Près d'un grand lac" }}
+                                        /><br />
+                                    </div>
+                                    <div>
+                                        <Field
+                                            component={CheckboxWithLabel}
+                                            type="checkbox"
+                                            name="noFiber"
+                                            Label={{ label: "Sans la fibre" }}
+                                            disabled={false}
+                                        /><br />
+                                        <Field
+                                            component={CheckboxWithLabel}
+                                            type="checkbox"
+                                            name="noCountryside"
+                                            Label={{ label: "En ville" }}
+                                            disabled={false}
+                                        /><br />
+                                        <Field
+                                            component={CheckboxWithLabel}
+                                            type="checkbox"
+                                            name="noMountains"
+                                            Label={{ label: "Pas à la montagne" }}
+                                            disabled={false}
+                                        /><br />
+                                        <Field
+                                            component={CheckboxWithLabel}
+                                            type="checkbox"
+                                            name="noCoastline"
+                                            Label={{ label: "Pas à la mer" }}
+                                            disabled={false}
+                                        /><br />
+                                        <Field
+                                            component={CheckboxWithLabel}
+                                            type="checkbox"
+                                            name="hasPark"
+                                            Label={{ label: "Dans un parc naturel" }}
+                                            disabled={false}
+                                        /><br />
+                                    </div>
+                                </div>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    type="submit"
                                     disabled={false}
-                                /><br/>
-                                <Field
-                                    component={CheckboxWithLabel}
-                                    type="checkbox"
-                                    name="hasCountryside"
-                                    Label={{ label: "À la campagne" }}
-                                    disabled={false}
-                                /><br/>
-                                <Field
-                                    component={CheckboxWithLabel}
-                                    type="checkbox"
-                                    name="hasMountains"
-                                    Label={{ label: "À la montagne" }}
-                                    disabled={false}
-                                /><br/>
-                                <Field
-                                    component={CheckboxWithLabel}
-                                    type="checkbox"
-                                    name="hasCoastline"
-                                    Label={{ label: "À la mer" }}
-                                    disabled={false}
-                                /><br/>
-                                <Field
-                                    component={CheckboxWithLabel}
-                                    type="checkbox"
-                                    name="hasLake"
-                                    disabled={false}
-                                    Label={{ label: "Près d'un grand lac" }}
-                                /><br/>
-                            </div>
-                            <div>
-                                <Field
-                                    component={CheckboxWithLabel}
-                                    type="checkbox"
-                                    name="noFiber"
-                                    Label={{ label: "Sans la fibre" }}
-                                    disabled={false}
-                                /><br/>
-                                <Field
-                                    component={CheckboxWithLabel}
-                                    type="checkbox"
-                                    name="noCountryside"
-                                    Label={{ label: "En ville" }}
-                                    disabled={false}
-                                /><br/>
-                                <Field
-                                    component={CheckboxWithLabel}
-                                    type="checkbox"
-                                    name="noMountains"
-                                    Label={{ label: "Pas à la montagne" }}
-                                    disabled={false}
-                                /><br/>
-                                <Field
-                                    component={CheckboxWithLabel}
-                                    type="checkbox"
-                                    name="noCoastline"
-                                    Label={{ label: "Pas à la mer" }}
-                                    disabled={false}
-                                /><br/>
-                                <Field
-                                    component={CheckboxWithLabel}
-                                    type="checkbox"
-                                    name="hasPark"
-                                    Label={{ label: "Dans un parc naturel" }}
-                                    disabled={false}
-                                /><br/>
-                            </div>
-                        </div>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            type="submit"
-                            disabled={false}
-                            style={{ marginTop: 10 }}
-                        >Filtrer</Button>
-                    </Form>
-                )}
+                                    style={{ marginTop: 10 }}
+                                >Filtrer</Button>
+                            </Form>
+                        )}
                 </Formik>
             </div>
         )
