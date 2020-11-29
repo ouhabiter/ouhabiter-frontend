@@ -7,17 +7,16 @@ import Collapse from '@material-ui/core/Collapse';
 import CloseIcon from '@material-ui/icons/Close';
 import IconButton from '@material-ui/core/IconButton';
 import { withRouter } from "react-router-dom";
-import StationService from '../services/StationService';
+import stationService from '../services/StationService';
 
 class SidePanel extends Component {
     constructor(props) {
         super(props);
         this.handleCloseStation = this.handleCloseStation.bind(this);
-        this.stationService = new StationService();
         let station = null;
         let searchActive = true;
         if (props.match.params.destination) {
-            station = this.stationService.getStationBySlug(props.match.params.destination);
+            station = stationService.getStationBySlug(props.match.params.destination);
             if (station) {
                 searchActive = false;
             }
@@ -38,7 +37,7 @@ class SidePanel extends Component {
             (!prevProps.match.params.destination && this.props.match.params.destination) || // first destination
             (prevProps.match.params.destination !== this.props.match.params.destination) // new destination
         ) {
-            let station = this.stationService.getStationBySlug(this.props.match.params.destination);
+            let station = stationService.getStationBySlug(this.props.match.params.destination);
             this.setState({
                 searchActive: false,
                 station: station
@@ -56,7 +55,7 @@ class SidePanel extends Component {
     render() {
         return (
             <Box pl={1} className="SidePanel">
-                <img src={process.env.PUBLIC_URL + "/logo.png"}/>
+                <img src={process.env.PUBLIC_URL + "/logo.png"} width="30%"/>
                 <Collapse in={this.state.searchActive}>
                     <Search onSearchChange={this.props.onSearchChange}></Search>
                 </Collapse>

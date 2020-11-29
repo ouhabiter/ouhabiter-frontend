@@ -7,14 +7,13 @@ import TimeHelper from '../helpers/TimeHelper';
 import CityService from '../services/CityService';
 import { withRouter } from "react-router-dom";
 import './Map.css';
-import StationService from '../services/StationService';
+import stationService from '../services/StationService';
 
 class Map extends Component {
     constructor(props) {
         super(props);
         this.onMapLoad = this.onMapLoad.bind(this);
         this.handleMapClick = this.handleMapClick.bind(this);
-        this.stationService = new StationService();
         this.state = {
             colorScale: null
         }
@@ -22,10 +21,12 @@ class Map extends Component {
 
     componentDidUpdate(prevProps) {
         if (prevProps !== this.props){
-            this.updateStations();
-            this.updateColorScale();
-            if (this.props.match.params.destination !== prevProps.match.params.destination) {
-                this.setStation(this.props.match.params.destination);
+            if (this.map) { // map hasn't loaded yet
+                this.updateStations();
+                this.updateColorScale();
+                if (this.props.match.params.destination !== prevProps.match.params.destination) {
+                    this.setStation(this.props.match.params.destination);
+                }
             }
         }
     }
@@ -114,6 +115,7 @@ class Map extends Component {
     }
 
     updateColorScale() {
+        console.log(this.props.minTravelTime, this.props.maxTravelTime);
         let colorScale = MapHelper.buildColorScale(this.props.minTravelTime, this.props.maxTravelTime);
         let paintProperty = [
             'step',
@@ -130,13 +132,13 @@ class Map extends Component {
         let features = this.map.queryRenderedFeatures(event.point, {layers: ['stations']});
         let stationSlug = null;
         if (features.length > 0) {
-            stationSlug = this.stationService.getSlugFromId(features[0].properties.id);
+            stationSlug = stationService.getSlugFromId(features[0].properties.id);
         }
         this.setStation(stationSlug);
     }
 
     setStation(stationSlug) {
-        let station = this.stationService.getStationBySlug(stationSlug);
+        let station = stationService.getStationBySlug(stationSlug);
         if (!station) {
             this.map.getLayer('itinerary').setLayoutProperty('visibility', 'none');
             this.map.getLayer('city-outline').setLayoutProperty('visibility', 'none');
@@ -153,7 +155,7 @@ class Map extends Component {
             }
         });
         this.map.getLayer('itinerary').setLayoutProperty('visibility', 'visible');
-        this.stationService.getItinerary('admin:fr:75056', station.stationId).then((itinerary) => {
+        stationService.getItinerary('admin:fr:75056', station.stationId).then((itinerary) => {
             if (itinerary) {
                 this.map.getSource('itinerary').setData(itinerary);
             } else {

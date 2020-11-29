@@ -9,7 +9,7 @@ export const populationMarks = [
     {value: 125, scaledValue: 50000, label: "50k"},
     {value: 150, scaledValue: 100000, label: "100k"},
     {value: 175, scaledValue: 200000, label: "200k"},
-    {value: 200, scaledValue: 1000000, label: "1M"}
+    {value: 200, scaledValue: 3000000, label: "3M"}
 ];
 
 export const travelTimeMarks = [
@@ -48,7 +48,7 @@ function sliderScale(marks, value, step) {
 
 export function populationSliderText(value) {
     if (value >= 1000000) {
-        return "1M+";
+        return `${Math.trunc(value/1000000)}M`;
     } else if (value > 1000) {
         return `${Math.trunc(value/1000)}K`;
     }

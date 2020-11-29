@@ -14,6 +14,12 @@ import {
     travelTimeSliderText,
 } from '../helpers/SliderHelper';
 import debounce from 'debounce';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+
 
 const AutoSave = () => {
     const formik = useFormikContext();
@@ -37,10 +43,12 @@ class Search extends Component {
             minPopulation: 0,
             maxPopulation: 200,
             populationRange: [0, 200],
+            fromCityInseeCode: process.env.REACT_APP_PARIS_INSEE_CODE,
         }
     }
 
     onSliderChange(event, value, setFieldValue, field) {
+        // use formik's setFieldValue to update form
         if (field === "travelTime") {
             setFieldValue("minTravelTime", travelTimeSliderScale(value[0]));
             setFieldValue("maxTravelTime", travelTimeSliderScale(value[1]));
@@ -52,6 +60,13 @@ class Search extends Component {
         }
     }
 
+    // XXX feels like I shouldn't need to use the component's state for this
+    onRadioChange(event, value, setFieldValue, field) {
+        // use formik's setFieldValue to update form
+        setFieldValue(event.target.name, value);
+        this.setState({[event.target.name]: value}); // see computed property names
+    }
+
     doSearch(values) {
         this.props.onSearchChange(values);
     }
@@ -60,7 +75,12 @@ class Search extends Component {
         return (
             <div>
                 <Formik
-                    initialValues={{ travelTime: this.state.travelTimeRange, population: this.state.populationRange }}
+                    initialValues={{
+                        travelTime: this.state.travelTimeRange,
+                        population: this.state.populationRange,
+                        minTravelTime: this.state.minTravelTime,
+                        maxTravelTime: this.state.maxTravelTime,
+                    }}
                     onSubmit={debounce((values) => {
                         this.doSearch(values);
                     }, 200)}
@@ -71,7 +91,20 @@ class Search extends Component {
                 }) => (
                     <Form onSubmit={handleSubmit} onChange={this.handleFormChange}>
                         <AutoSave/>
-                        <Typography id="travel-time" gutterBottom>Temps de trajet (depuis Paris)</Typography>
+                        <Typography id="from-city-insee-code" variant="h4" gutterBottom>Départ</Typography>
+                        <Box pb={2}>
+                            <RadioGroup
+                                aria-label="from"
+                                name="fromCityInseeCode"
+                                value={this.state.fromCityInseeCode}
+                                onChange={(event, value) => this.onRadioChange(event, value, setFieldValue)}
+                            >
+                                <FormControlLabel value={process.env.REACT_APP_PARIS_INSEE_CODE} control={<Radio />} label="Paris" />
+                                <FormControlLabel value={process.env.REACT_APP_LYON_INSEE_CODE} control={<Radio />} label="Lyon" />
+                            </RadioGroup>
+                        </Box>
+                        <Typography id="from-city-insee-code" variant="h4" gutterBottom>Arrivée</Typography>
+                        <Typography id="travel-time" gutterBottom>Temps de trajet</Typography>
                         <Box m={2}>
                             <Slider
                                 value={this.state.travelTimeRange}

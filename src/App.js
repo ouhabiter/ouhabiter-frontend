@@ -1,7 +1,7 @@
 import './App.css';
 import Map from './components/Map.js'
 import SidePanel from './components/SidePanel.js'
-import StationService from './services/StationService.js';
+import stationService from './services/StationService.js';
 import React, { Component } from 'react';
 import { BrowserRouter, Route } from "react-router-dom";
 import 'fontsource-roboto';
@@ -9,23 +9,26 @@ import 'fontsource-roboto';
 class App extends Component {
   constructor(props) {
     super(props);
-    this.stationService = new StationService();
     this.state = {
-      stations: this.stationService.stations,
+      stations: stationService.stations,
       search: {
         // follows slider helper scale
         minTravelTime: 0,
         maxTravelTime: 20,
       }
     };
+    stationService.updateStations(process.env.REACT_APP_PARIS_INSEE_CODE).then(() => {
+      this.setState({stations: stationService.stations});
+    });
     this.handleSearchChange = this.handleSearchChange.bind(this);
   }
 
   handleSearchChange(search) {
-    let stations = this.stationService.search(search);
-    this.setState({
-      search: search,
-      stations: stations
+    stationService.updateStations(search.fromCityInseeCode).then(() => {
+      this.setState({
+        search: search,
+        stations: stationService.stations
+      });
     });
   }
 
