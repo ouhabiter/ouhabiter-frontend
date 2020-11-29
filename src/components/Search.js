@@ -33,6 +33,12 @@ const AutoSave = () => {
     return null;
 }
 
+const AVAILABLE_CITIES = [
+    {name: "Paris", inseeCode: process.env.REACT_APP_PARIS_INSEE_CODE},
+    {name: "Lyon", inseeCode: "69123"},
+    {name: "Marseille", inseeCode: "13055"},
+]
+
 class Search extends Component {
     constructor(props) {
         super(props);
@@ -43,7 +49,7 @@ class Search extends Component {
             minPopulation: 0,
             maxPopulation: 200,
             populationRange: [0, 200],
-            fromCityInseeCode: process.env.REACT_APP_PARIS_INSEE_CODE,
+            fromCityInseeCode: AVAILABLE_CITIES[0].inseeCode,
         }
     }
 
@@ -99,8 +105,11 @@ class Search extends Component {
                                 value={this.state.fromCityInseeCode}
                                 onChange={(event, value) => this.onRadioChange(event, value, setFieldValue)}
                             >
-                                <FormControlLabel value={process.env.REACT_APP_PARIS_INSEE_CODE} control={<Radio />} label="Paris" />
-                                <FormControlLabel value={process.env.REACT_APP_LYON_INSEE_CODE} control={<Radio />} label="Lyon" />
+                                {AVAILABLE_CITIES.map((city) => {
+                                    return (
+                                        <FormControlLabel value={city.inseeCode} control={<Radio />} label={city.name} />
+                                    )
+                                })}
                             </RadioGroup>
                         </Box>
                         <Typography id="from-city-insee-code" variant="h4" gutterBottom>Arrivée</Typography>
