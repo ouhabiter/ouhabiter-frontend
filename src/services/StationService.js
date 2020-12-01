@@ -12,14 +12,15 @@ class StationService {
 
   async updateStations(inseeCode) {
     // save all stations to avoid calls
+    var promise = null;
     if (inseeCode === this.inseeCode) {
-      var promise = new Promise((resolve) => {resolve()});
+      promise = new Promise((resolve) => {resolve()});
       return promise;
     }
     if (inseeCode in this.formerStations) {
       this.stations = this.formerStations[inseeCode];
       this.inseeCode = inseeCode;
-      var promise = new Promise((resolve) => {resolve()});
+      promise = new Promise((resolve) => {resolve()});
       return promise;
     }
     this.formerStations[this.inseeCode] = this.stations;

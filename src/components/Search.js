@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Formik, Form, Field, useFormikContext } from 'formik';
 import { Button } from '@material-ui/core';
-import { TextField, CheckboxWithLabel } from 'formik-material-ui';
+import { CheckboxWithLabel } from 'formik-material-ui';
 import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
 import Box from '@material-ui/core/Box';

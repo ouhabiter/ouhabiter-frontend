@@ -55,7 +55,7 @@ class SidePanel extends Component {
     render() {
         return (
             <Box pl={1} className="SidePanel">
-                <img src={process.env.PUBLIC_URL + "/logo.png"} width="30%"/>
+                <img alt="logo" src={process.env.PUBLIC_URL + "/logo.png"} width="30%"/>
                 <Collapse in={this.state.searchActive}>
                     <Search onSearchChange={this.props.onSearchChange}></Search>
                 </Collapse>
