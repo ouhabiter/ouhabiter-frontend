@@ -1,6 +1,6 @@
 {
   "name": "ouhabiter-frontend",
-  "homepage": "https://rocambolesque.github.io/ouhabiter/",
+  "homepage": "https://rocambolesque.github.io/ouhabiter-frontend/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
