@@ -8,36 +8,29 @@ import CloseIcon from '@material-ui/icons/Close';
 import IconButton from '@material-ui/core/IconButton';
 import { withRouter } from "react-router-dom";
 import stationService from '../services/StationService';
+import HistoryHelper from '../helpers/HistoryHelper';
 
 class SidePanel extends Component {
     constructor(props) {
         super(props);
         this.handleCloseStation = this.handleCloseStation.bind(this);
-        let station = null;
-        let searchActive = true;
-        if (props.match.params.destination) {
-            station = stationService.getStationBySlug(props.match.params.destination);
-            if (station) {
-                searchActive = false;
-            }
-        }
         this.state = {
-            searchActive: searchActive,
-            station: station,
+            searchActive: true,
+            station: null,
         }
     }
 
     componentDidUpdate(prevProps) {
-        if (prevProps.match.params.destination && !this.props.match.params.destination) { // no destination anymore
+        if (prevProps.destination && !this.props.destination) { // no destination anymore
             this.setState({
                 searchActive: true,
                 station: null,
             });
         } else if (
-            (!prevProps.match.params.destination && this.props.match.params.destination) || // first destination
-            (prevProps.match.params.destination !== this.props.match.params.destination) // new destination
+            (!prevProps.destination && this.props.destination) || // first destination
+            (prevProps.destination !== this.props.destination) // new destination
         ) {
-            let station = stationService.getStationBySlug(this.props.match.params.destination);
+            let station = stationService.getStationBySlug(this.props.destination);
             this.setState({
                 searchActive: false,
                 station: station
@@ -46,7 +39,7 @@ class SidePanel extends Component {
     }
 
     handleCloseStation() {
-        this.props.history.push('');
+        HistoryHelper.setDestination(null);
         this.setState({
             searchActive: true
         });

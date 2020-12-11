@@ -10,6 +10,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      destination: null,
       stations: [],
       search: {
         // follows slider helper scale
@@ -22,9 +23,14 @@ class App extends Component {
 
   componentDidMount() {
     stationService.search(this.state.search).then((stations) => {
-      this.setState({stations: stations});
+      let searchParams = new URLSearchParams(window.location.search);
+      this.setState({
+        stations: stations,
+        destination: searchParams.get('destination'),
+      });
     });
     this.handleSearchChange = this.handleSearchChange.bind(this);
+    this.handleDestinationChange = this.handleDestinationChange.bind(this);
   }
 
   handleSearchChange(search) {
@@ -38,18 +44,29 @@ class App extends Component {
     }
   }
 
+  handleDestinationChange(destination) {
+    if (destination !== this.state.destination) {
+      this.setState({
+        destination: destination,
+      });
+    }
+  }
+
   render() {
     return (
       <div>
         <BrowserRouter>
-          <Route path="/:origin?/:destination?">
+          <Route path="">
             <SidePanel
               onSearchChange={this.handleSearchChange}
+              destination={this.state.destination}
             />
             <Map
               stations={this.state.stations}
               minTravelTime={this.state.search.minTravelTime}
               maxTravelTime={this.state.search.maxTravelTime}
+              fromCityInseeCode={this.state.search.fromCityInseeCode}
+              onDestinationChange={this.handleDestinationChange}
             />
           </Route>
         </BrowserRouter>

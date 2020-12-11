@@ -3,6 +3,7 @@ import TimerIcon from '@material-ui/icons/Timer';
 import React, { Component } from 'react';
 import MapboxMap from 'react-mapbox-wrapper';
 import MapHelper from '../helpers/MapHelper';
+import HistoryHelper from '../helpers/HistoryHelper';
 import TimeHelper from '../helpers/TimeHelper';
 import CityService from '../services/CityService';
 import { withRouter } from "react-router-dom";
@@ -15,7 +16,8 @@ class Map extends Component {
         this.onMapLoad = this.onMapLoad.bind(this);
         this.handleMapClick = this.handleMapClick.bind(this);
         this.state = {
-            colorScale: null
+            colorScale: null,
+            destination: null,
         }
     }
 
@@ -23,9 +25,6 @@ class Map extends Component {
         if (prevProps !== this.props){
             this.updateStations();
             this.updateColorScale();
-            if (this.props.match.params.destination !== prevProps.match.params.destination) {
-                this.setStation(this.props.match.params.destination);
-            }
         }
     }
 
@@ -95,7 +94,8 @@ class Map extends Component {
         this.updateStations();
         this.updateColorScale();
         this.forceUpdate();
-        this.setStation(this.props.match.params.destination);
+        let searchParams = new URLSearchParams(this.props.location.search);
+        this.setStation(searchParams.get('destination'));
     }
 
     updateStations() {
@@ -143,10 +143,12 @@ class Map extends Component {
         if (!station) {
             this.map.getLayer('itinerary').setLayoutProperty('visibility', 'none');
             this.map.getLayer('city-outline').setLayoutProperty('visibility', 'none');
-            this.props.history.push('')
+            HistoryHelper.setDestination(null);
+            this.props.onDestinationChange(null);
             return;
         }
-        this.props.history.push(`/paris/${stationSlug}`)
+        HistoryHelper.setDestination(stationSlug);
+        this.props.onDestinationChange(stationSlug);
         this.map.getLayer('city-outline').setLayoutProperty('visibility', 'visible'); // XXX should be after setData but won't work there
         CityService.getCityOutline(station.cityInseeCode).then((cityOutline) => {
             if (cityOutline) {
@@ -156,7 +158,7 @@ class Map extends Component {
             }
         });
         this.map.getLayer('itinerary').setLayoutProperty('visibility', 'visible');
-        stationService.getItinerary('admin:fr:75056', station.stationId).then((itinerary) => {
+        stationService.getItinerary(`admin:fr:${this.props.fromCityInseeCode}`, station.stationId).then((itinerary) => {
             if (itinerary) {
                 this.map.getSource('itinerary').setData(itinerary);
             } else {
