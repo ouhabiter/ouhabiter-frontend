@@ -15,8 +15,8 @@ class MapHelper {
     }
 
     static buildColorScale(min, max) {
-        let start = min;
-        let step = (max - start) / 5;
+        let start = parseFloat(min);
+        let step = (parseFloat(max) - start) / 5;
         let colorScale = [
             '#0A5502',
             start + step,

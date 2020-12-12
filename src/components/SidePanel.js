@@ -8,7 +8,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import IconButton from '@material-ui/core/IconButton';
 import { withRouter } from "react-router-dom";
 import stationService from '../services/StationService';
-import HistoryHelper from '../helpers/HistoryHelper';
+import { setDestination } from '../helpers/SearchHelper';
 
 class SidePanel extends Component {
     constructor(props) {
@@ -39,7 +39,7 @@ class SidePanel extends Component {
     }
 
     handleCloseStation() {
-        HistoryHelper.setDestination(null);
+        setDestination(null);
         this.setState({
             searchActive: true
         });

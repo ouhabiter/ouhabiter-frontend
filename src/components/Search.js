@@ -12,11 +12,14 @@ import {
     travelTimeSliderScale,
     populationSliderText,
     travelTimeSliderText,
+    populationSliderValue,
+    travelTimeSliderValue,
 } from '../helpers/SliderHelper';
 import debounce from 'debounce';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
+import { setSearch, getSearch } from '../helpers/SearchHelper';
 
 const AutoSave = () => {
     const formik = useFormikContext();
@@ -39,15 +42,17 @@ const AVAILABLE_CITIES = [
 class Search extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            minTravelTime: 0,
-            maxTravelTime: 20,
-            travelTimeRange: [0, 20],
-            minPopulation: 0,
-            maxPopulation: 200,
-            populationRange: [0, 200],
-            fromCityInseeCode: AVAILABLE_CITIES[0].inseeCode,
-        }
+        let search = getSearch();
+        search.travelTimeRange = [
+          travelTimeSliderValue(search.minTravelTime),
+          travelTimeSliderValue(search.maxTravelTime)
+        ];
+        search.populationRange = [
+          populationSliderValue(search.minPopulation),
+          populationSliderValue(search.maxPopulation)
+        ];
+        console.log(search);
+        this.state = search;
     }
 
     onSliderChange(event, value, setFieldValue, field) {
@@ -72,19 +77,14 @@ class Search extends Component {
 
     doSearch(values) {
         this.props.onSearchChange(values);
+        setSearch(values);
     }
 
     render() {
         return (
             <div>
                 <Formik
-                    initialValues={{
-                        travelTime: this.state.travelTimeRange,
-                        population: this.state.populationRange,
-                        minTravelTime: this.state.minTravelTime,
-                        maxTravelTime: this.state.maxTravelTime,
-                        fromCityInseeCode: this.state.fromCityInseeCode,
-                    }}
+                    initialValues={this.state}
                     onSubmit={debounce((values) => {
                         this.doSearch(values);
                     }, 100)}
@@ -118,8 +118,8 @@ class Search extends Component {
                                         onChange={(event, value) => this.onSliderChange(event, value, setFieldValue, "travelTime")}
                                         valueLabelDisplay="auto"
                                         valueLabelFormat={travelTimeSliderText}
-                                        min={this.state.minTravelTime}
-                                        max={this.state.maxTravelTime}
+                                        min={travelTimeMarks[0].value}
+                                        max={travelTimeMarks[travelTimeMarks.length-1].value}
                                         scale={(x) => travelTimeSliderScale(x)}
                                         marks={travelTimeMarks}
                                         style={{ width: "95%" }}
@@ -132,8 +132,8 @@ class Search extends Component {
                                         onChange={(event, value) => this.onSliderChange(event, value, setFieldValue, "population")}
                                         valueLabelDisplay="auto"
                                         valueLabelFormat={populationSliderText}
-                                        min={this.state.minPopulation}
-                                        max={this.state.maxPopulation}
+                                        min={populationMarks[0].value}
+                                        max={populationMarks[populationMarks.length-1].value}
                                         scale={(x) => populationSliderScale(x)}
                                         marks={populationMarks}
                                         style={{ width: "95%" }}

@@ -3,7 +3,7 @@ import TimerIcon from '@material-ui/icons/Timer';
 import React, { Component } from 'react';
 import MapboxMap from 'react-mapbox-wrapper';
 import MapHelper from '../helpers/MapHelper';
-import HistoryHelper from '../helpers/HistoryHelper';
+import { setDestination } from '../helpers/SearchHelper';
 import TimeHelper from '../helpers/TimeHelper';
 import CityService from '../services/CityService';
 import { withRouter } from "react-router-dom";
@@ -141,23 +141,19 @@ class Map extends Component {
     setStation(stationSlug) {
         let station = stationService.getStationBySlug(stationSlug);
         if (!station) {
-            this.map.getLayer('itinerary').setLayoutProperty('visibility', 'none');
-            this.map.getLayer('city-outline').setLayoutProperty('visibility', 'none');
-            HistoryHelper.setDestination(null);
+            setDestination(null);
             this.props.onDestinationChange(null);
             return;
         }
-        HistoryHelper.setDestination(stationSlug);
+        setDestination(stationSlug);
         this.props.onDestinationChange(stationSlug);
-        this.map.getLayer('city-outline').setLayoutProperty('visibility', 'visible'); // XXX should be after setData but won't work there
-        CityService.getCityOutline(station.cityInseeCode).then((cityOutline) => {
+        CityService.getCityOutline(station.toCityInseeCode).then((cityOutline) => {
             if (cityOutline) {
                 this.map.getSource('city-outline').setData(cityOutline);
             } else {
                 this.map.getLayer('city-outline').setLayoutProperty('visibility', 'none');
             }
         });
-        this.map.getLayer('itinerary').setLayoutProperty('visibility', 'visible');
         stationService.getItinerary(`admin:fr:${this.props.fromCityInseeCode}`, station.stationId).then((itinerary) => {
             if (itinerary) {
                 this.map.getSource('itinerary').setData(itinerary);

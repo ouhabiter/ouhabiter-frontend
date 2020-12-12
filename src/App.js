@@ -5,6 +5,7 @@ import stationService from './services/StationService.js';
 import React, { Component } from 'react';
 import { BrowserRouter, Route } from "react-router-dom";
 import 'fontsource-roboto';
+import { getDestination, getSearch } from './helpers/SearchHelper';
 
 class App extends Component {
   constructor(props) {
@@ -12,12 +13,7 @@ class App extends Component {
     this.state = {
       destination: null,
       stations: [],
-      search: {
-        // follows slider helper scale
-        minTravelTime: 0,
-        maxTravelTime: 20,
-        fromCityInseeCode: process.env.REACT_APP_PARIS_INSEE_CODE,
-      }
+      search: getSearch(),
     };
   }
 
@@ -26,7 +22,7 @@ class App extends Component {
       let searchParams = new URLSearchParams(window.location.search);
       this.setState({
         stations: stations,
-        destination: searchParams.get('destination'),
+        destination: getDestination(),
       });
     });
     this.handleSearchChange = this.handleSearchChange.bind(this);

@@ -46,6 +46,24 @@ function sliderScale(marks, value, step) {
     return remainder * increment + previousMark.scaledValue;
 }
 
+export function populationSliderValue(scaledValue) {
+  return sliderValue(populationMarks, scaledValue);
+}
+
+export function travelTimeSliderValue(scaledValue) {
+  return sliderValue(travelTimeMarks, scaledValue);
+}
+
+function sliderValue(marks, scaledValue) {
+  let value = marks[0].value;
+  marks.forEach(mark => {
+    if (mark.scaledValue <= scaledValue) {
+      value = mark.value;
+    }
+  });
+  return value;
+}
+
 export function populationSliderText(value) {
     if (value >= 1000000) {
         return `${Math.trunc(value/1000000)}M`;
