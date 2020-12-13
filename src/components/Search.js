@@ -20,6 +20,10 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import { setSearch, getSearch } from '../helpers/SearchHelper';
+import TrainIcon from '@material-ui/icons/Train';
+import GroupIcon from '@material-ui/icons/Group';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
+import './Search.css';
 
 const AutoSave = () => {
     const formik = useFormikContext();
@@ -96,7 +100,7 @@ class Search extends Component {
                             <Form onSubmit={handleSubmit} onChange={this.handleFormChange}>
                                 <AutoSave />
                                 <Box pb={2}>
-                                    <Typography id="travel-time" gutterBottom>Départ</Typography>
+                                    <Typography id="travel-time" gutterBottom class="SearchItemWithIcon"><LocationOnIcon/>&nbsp;Départ</Typography>
                                     <FormControl variant="outlined" style={{ width: "95%" }}>
                                         <Select
                                             name="fromCityInseeCode"
@@ -111,7 +115,7 @@ class Search extends Component {
                                         </Select>
                                     </FormControl>
                                 </Box>
-                                <Typography id="travel-time" gutterBottom>Temps de trajet</Typography>
+                                <Typography id="travel-time" gutterBottom class="SearchItemWithIcon"><TrainIcon />&nbsp;Temps de trajet</Typography>
                                 <Box m={2}>
                                     <Slider
                                         value={this.state.travelTimeRange}
@@ -125,7 +129,7 @@ class Search extends Component {
                                         style={{ width: "95%" }}
                                     />
                                 </Box>
-                                <Typography id="population" gutterBottom>Population</Typography>
+                                <Typography id="population" gutterBottom class="SearchItemWithIcon"><GroupIcon/>&nbsp;Population</Typography>
                                 <Box m={2}>
                                     <Slider
                                         value={this.state.populationRange}
