@@ -20,7 +20,6 @@ class App extends Component {
 
   componentDidMount() {
     stationService.search(this.state.search).then((stations) => {
-      let searchParams = new URLSearchParams(window.location.search);
       this.setState({
         stations: stations,
         destination: getDestination(),
