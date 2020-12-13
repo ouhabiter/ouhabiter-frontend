@@ -6,6 +6,7 @@ import React, { Component } from 'react';
 import { BrowserRouter, Route } from "react-router-dom";
 import 'fontsource-roboto';
 import { getDestination, getSearch } from './helpers/SearchHelper';
+import LandingPage from './components/LandingPage';
 
 class App extends Component {
   constructor(props) {
@@ -52,7 +53,10 @@ class App extends Component {
     return (
       <div>
         <BrowserRouter>
-          <Route path="">
+          <Route exact path="/">
+            <LandingPage />
+          </Route>
+          <Route path="/app">
             <SidePanel
               onSearchChange={this.handleSearchChange}
               destination={this.state.destination}

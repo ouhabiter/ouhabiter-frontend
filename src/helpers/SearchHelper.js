@@ -9,7 +9,9 @@ export function setSearch(search) {
       searchParams.set(searchParam, search[searchParam]);
     }
   }
-  window.history.pushState('', '', `?${searchParams.toString()}`);
+  if (searchParams.length > 0) {
+    window.history.pushState('', '', `?${searchParams.toString()}`);
+  }
 }
 
 export function setDestination(destination) {
